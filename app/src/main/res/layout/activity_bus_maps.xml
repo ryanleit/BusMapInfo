@@ -40,6 +40,7 @@
             android:background="@null"
             android:hint="Enter Address City or Zip Code"
             android:imeOptions="actionSearch"/>
+
     </RelativeLayout>
 
     <ImageView
@@ -52,5 +53,16 @@
         android:scaleType="centerCrop"
         android:id="@+id/ic_gps"
         android:src="@drawable/ic_gps"/>
+
+    <TextView
+        android:id="@+id/place_details"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/ic_gps"
+        android:autoLink="all"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 </RelativeLayout>
 
