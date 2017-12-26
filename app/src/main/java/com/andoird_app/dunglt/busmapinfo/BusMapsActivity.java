@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,36 +69,36 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private static final float DEFAULT_ZOOM = 20.0f;
+    private static final float DEFAULT_ZOOM = 15.0f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
             new LatLng(-40, -168), new LatLng(71,136)
     );
 
     //vars
     private GoogleApiClient client;
-
     private LocationRequest locationRequest;
     //private Location lastLocation;
     //private Marker currentLocationMarker;
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
+
     //widgets
     private AutoCompleteTextView mSearchText;
     private ImageView mGps;
     private ImageView mIconSearch;
+
     //Auto complete
     protected GeoDataClient mGeoDataClient;
-
-    private PlaceAutocompleteAdapter mAdapter;
-
     private TextView mPlaceDetailsText;
-
-    private TextView mPlaceDetailsAttribution;
+    //private TextView mPlaceDetailsAttribution;
 
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
             new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+
+    LinearLayout layoutBusList;
+    BottomSheetBehavior sheetBehavior;
+    TextView mBusInfo;
     /**
      * Callback for changes in location.
      */
@@ -112,8 +114,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mIconSearch = (ImageView)findViewById(R.id.ic_magnify);
 
         //View search place detail variable
-        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
-
+       // mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+        mBusInfo = (TextView) findViewById(R.id.bus_one_info);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getLocationPermission();
@@ -126,6 +128,64 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        /**
+         * *************************************
+         * BUS LIST INFO BOTTOM SHEET
+         * *************************************
+         */
+        //Bus List Info
+        layoutBusList = (LinearLayout)findViewById(R.id.bus_list_info);
+        sheetBehavior = BottomSheetBehavior.from(layoutBusList);
+        /**
+         * bottom sheet state change listener
+         * we are changing button text when sheet changed state
+         * */
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+                        Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                        //btnBottomSheet.setText("Close Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+                        Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                        //btnBottomSheet.setText("Expand Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+        /**
+         * manually opening / closing bottom sheet on button click
+         */
+        layoutBusList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                   // btnBottomSheet.setText("Close sheet");
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                    //btnBottomSheet.setText("Expand sheet");
+                }
+            }
+        });
     }
 
     private void initSearch(){
@@ -279,10 +339,11 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private void moveCamera(LatLng latlng, float zoom, String title) {
         Log.d(TAG, "Move camera to location: " + latlng.latitude + ", " + latlng.longitude);
 
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(DEFAULT_ZOOM));
+     //   mMap.animateCamera(CameraUpdateFactory.zoomBy(DEFAULT_ZOOM));
         mMap.addMarker(new MarkerOptions().position(latlng).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
 
         hideSoftKeyboard();
     }
@@ -387,7 +448,11 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
 
-    /*auto complete code*/
+    /*
+    * ***********************************************************************************
+    * AUTO COMPLETE SEARCH LOCATION
+    * ***********************************************************************************
+    * */
 
     /**
      * Listener that handles selections from suggestions from the AutoCompleteTextView that
@@ -442,11 +507,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 final Place place = places.get(0);
 
                 // Format details of the place for display and show it in a TextView.
-                mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                /*mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                        place.getId(), place.getAddress(), place.getPhoneNumber(),
+                        place.getWebsiteUri()));*/
+                mBusInfo.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri()));
-                mPlaceDetailsText.setVisibility(View.VISIBLE);
-                geoLocate();
+                //geoLocate();
+                moveCamera(new LatLng(place.getLatLng().latitude, place.getLatLng().longitude),DEFAULT_ZOOM, place.getName().toString());
                 // Display the third party attributions if set.
                 /*final CharSequence thirdPartyAttribution = places.getAttributions();
                 if (thirdPartyAttribution == null) {
