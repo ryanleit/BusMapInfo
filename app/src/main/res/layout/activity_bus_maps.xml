@@ -22,7 +22,14 @@
         android:elevation="10dp"
         android:background="@drawable/white_boder"
         android:id="@+id/relLayout1">
-
+        <ImageView
+            android:id="@+id/ic_navibar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_navbar" />
         <ImageView
             android:id="@+id/ic_magnify"
             android:layout_width="20dp"
@@ -35,6 +42,7 @@
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/ic_navibar"
             android:layout_toLeftOf="@id/ic_magnify"
             android:layout_centerVertical="true"
             android:paddingLeft="6dp"
