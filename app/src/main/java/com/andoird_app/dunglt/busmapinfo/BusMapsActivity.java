@@ -110,6 +110,9 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         mGps = (ImageView)findViewById(R.id.ic_gps);
 
+        //View search place detail variable
+        mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
+
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getLocationPermission();
@@ -422,26 +425,28 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         @Override
         public void onComplete(Task<PlaceBufferResponse> task) {
             try {
+                hideSoftKeyboard();
+
                 PlaceBufferResponse places = task.getResult();
 
                 // Get the Place object from the buffer.
                 final Place place = places.get(0);
 
                 // Format details of the place for display and show it in a TextView.
-
-              /*  mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
-                        place.getWebsiteUri()));*/
+                        place.getWebsiteUri()));
+                mPlaceDetailsText.setVisibility(View.VISIBLE);
                 geoLocate();
                 // Display the third party attributions if set.
-                final CharSequence thirdPartyAttribution = places.getAttributions();
+                /*final CharSequence thirdPartyAttribution = places.getAttributions();
                 if (thirdPartyAttribution == null) {
-                    //mPlaceDetailsAttribution.setVisibility(View.GONE);
+                    mPlaceDetailsAttribution.setVisibility(View.GONE);
                 } else {
-                   // mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
-                   // mPlaceDetailsAttribution.setText(
-                   //         Html.fromHtml(thirdPartyAttribution.toString()));
-                }
+                    mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
+                    mPlaceDetailsAttribution.setText(
+                            Html.fromHtml(thirdPartyAttribution.toString()));
+                }*/
 
                 Log.i(TAG, "Place details received: " + place.getName());
 
