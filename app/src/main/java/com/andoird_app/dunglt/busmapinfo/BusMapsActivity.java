@@ -85,7 +85,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     //widgets
     private AutoCompleteTextView mSearchText;
     private ImageView mGps;
-
+    private ImageView mIconSearch;
     //Auto complete
     protected GeoDataClient mGeoDataClient;
 
@@ -109,6 +109,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
         mGps = (ImageView)findViewById(R.id.ic_gps);
+        mIconSearch = (ImageView)findViewById(R.id.ic_magnify);
 
         //View search place detail variable
         mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
@@ -138,6 +139,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGeoDataClient, LAT_LNG_BOUNDS, null);
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
+
+        mIconSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: click icon search location!");
+                geoLocate();
+            }
+        });
         /*mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
