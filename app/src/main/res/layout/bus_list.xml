@@ -47,12 +47,12 @@
             android:textColor="#444"
            />
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dp"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_bus"
+            android:background="@drawable/ic_bus"-->
             />
     </RelativeLayout>
     <TextView

@@ -40,8 +40,8 @@
             android:src="@drawable/ic_navbar" />
         <ImageView
             android:id="@+id/ic_magnify"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
@@ -77,5 +77,14 @@
 </RelativeLayout>
     <!-- Adding bottom sheet after main content -->
     <include layout="@layout/bus_list" />
-
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_bus_float"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_bus_float"
+        android:background="@drawable/oval_shape"
+        android:backgroundTint="#fcf9f9"
+        app:layout_anchor="@id/bus_list_info"
+        app:layout_anchorGravity="top|right|end" />
 </android.support.design.widget.CoordinatorLayout>
