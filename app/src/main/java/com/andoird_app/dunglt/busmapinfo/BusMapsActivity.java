@@ -26,8 +26,10 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -56,6 +58,7 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallback,
@@ -99,6 +102,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     LinearLayout layoutBusList;
     BottomSheetBehavior sheetBehavior;
     TextView mCurrentAddress;
+
+    // Array of strings...
+    ListView simpleList;
+    String countryList[] = {"India", "China", "australia", "Portugle", "America", "NewZealand"};
     /**
      * Callback for changes in location.
      */
@@ -186,7 +193,17 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
+
+        /**
+         * ***********************************************
+         * SOURCE CODE FOR LIST VIEW
+         * ***********************************************
+         */
+        simpleList = (ListView)findViewById(R.id.bus_list_around);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.bus_detail, countryList);
+        simpleList.setAdapter(arrayAdapter);
     }
+
 
     private void initSearch(){
         Log.d(TAG, "Init: initializing");
@@ -252,6 +269,28 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
             mCurrentAddress.setText(address.getLocality().toString());
             moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
+        }
+    }
+
+    private void showCurrentAddress(LatLng latLng){
+        Log.d(TAG, "showCurrentAddress: Get detail location by lat lng!");
+
+        String searchString = mSearchText.getText().toString();
+        Geocoder geocoder = new Geocoder(BusMapsActivity.this);
+        List<Address> list = new ArrayList<>();
+
+        try {
+            list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+        }catch (IOException e){
+            Log.d(TAG, "showCurrentAddress: IOexception: "+ e.getMessage());
+        }
+
+        if(list.size() > 0){
+            Address address = list.get(0);
+            Log.d(TAG, "showCurrentAddress: found address" + address.toString());
+
+            mCurrentAddress.setText(address.getThoroughfare().toString());
+           // moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
         }
     }
     private void getLocationPermission(){
@@ -325,9 +364,11 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                     if (task.isSuccessful() && task.getResult() != null) {
                         Log.d(TAG, "onComplete: found location");
                         Location currentLocation = task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "Your location");
+                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10.0f, "Your location");
+                        showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
                         Log.d(TAG, "onComplete: current location is null");
+                        mCurrentAddress.setText("Unable defind your location!");
                         Toast.makeText(BusMapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -344,7 +385,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.addMarker(new MarkerOptions().position(latlng).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
 
         hideSoftKeyboard();
     }
