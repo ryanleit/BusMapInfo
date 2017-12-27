@@ -50,6 +50,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -80,7 +81,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private GoogleApiClient client;
     private LocationRequest locationRequest;
     //private Location lastLocation;
-    //private Marker currentLocationMarker;
+    private Marker currentLocationMarker;
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
@@ -381,7 +382,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "Move camera to location: " + latlng.latitude + ", " + latlng.longitude);
 
      //   mMap.animateCamera(CameraUpdateFactory.zoomBy(DEFAULT_ZOOM));
-        mMap.addMarker(new MarkerOptions().position(latlng).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+        if(currentLocationMarker != null){
+            currentLocationMarker.remove();
+        }
+        currentLocationMarker = mMap.addMarker(new MarkerOptions().position(latlng).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
