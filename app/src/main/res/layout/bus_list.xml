@@ -4,42 +4,70 @@
     android:id="@+id/bus_list_info"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#fff"
+    android:background="#78cde9"
     android:orientation="vertical"
     android:padding="@dimen/activity_margin"
-    app:behavior_hideable="true"
-    app:behavior_peekHeight="56dp"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="100dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:weightSum="3">
+        android:layout_gravity="center">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_margin"
-            android:layout_weight="2"
-            android:text="Bus List Info"
-            android:textColor="#444"
-            android:textSize="18dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:gravity="right"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textStyle="bold"
+            android:text="Current location"
             android:textSize="15dp"
-            android:text="Bus Icon" />
+            android:textStyle="bold" />
     </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/my_location_icon"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="2dp"
+            android:background="@drawable/ic_my_location"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/current_address_text"
+            android:text=""
+            android:layout_marginBottom="@dimen/activity_margin"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_centerHorizontal="true"
+            android:layout_toRightOf="@+id/my_location_icon"
+            android:textColor="#444"
+           />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_bus"
+            />
+    </RelativeLayout>
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:text="Bus station around:"
+        android:textColor="#444"
+        android:textStyle="bold" />
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bus_list_around">
+    </ListView>
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bus_one_info"
@@ -61,7 +89,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />
+        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />-->
 
     <Button
         android:layout_width="match_parent"
@@ -69,7 +97,7 @@
         android:layout_marginTop="30dp"
         android:background="#000"
         android:foreground="?attr/selectableItemBackground"
-        android:text="PROCEED PAYMENT"
+        android:text="Action"
         android:textColor="#fff" />
 
 </LinearLayout>

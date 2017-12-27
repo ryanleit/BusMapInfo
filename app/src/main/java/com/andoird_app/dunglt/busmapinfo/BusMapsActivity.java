@@ -98,7 +98,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     LinearLayout layoutBusList;
     BottomSheetBehavior sheetBehavior;
-    TextView mBusInfo;
+    TextView mCurrentAddress;
     /**
      * Callback for changes in location.
      */
@@ -115,7 +115,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         //View search place detail variable
        // mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
-        mBusInfo = (TextView) findViewById(R.id.bus_one_info);
+        mCurrentAddress = (TextView) findViewById(R.id.current_address_text);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getLocationPermission();
@@ -250,6 +250,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             Address address = list.get(0);
             Log.d(TAG, "geoLocate: found address" + address.toString());
             //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+            mCurrentAddress.setText(address.getLocality().toString());
             moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
         }
     }
@@ -507,10 +508,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 final Place place = places.get(0);
 
                 // Format details of the place for display and show it in a TextView.
-                /*mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
+                /*mCurrentAddress.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri()));*/
-                mBusInfo.setText(formatPlaceDetails(getResources(), place.getName(),
+                mCurrentAddress.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri()));
                 //geoLocate();
