@@ -4,6 +4,7 @@ package com.andoird_app.dunglt.busmapinfo;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,6 +20,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -48,6 +50,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -58,6 +62,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,15 +98,13 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     //Auto complete
     protected GeoDataClient mGeoDataClient;
-    private TextView mPlaceDetailsText;
-    //private TextView mPlaceDetailsAttribution;
-
-    private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
 
     LinearLayout layoutBusList;
     BottomSheetBehavior sheetBehavior;
     TextView mCurrentAddress;
+
+    //Maker for get Bus list around between two point
+    private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 
     // Array of strings...
     ListView simpleList;
@@ -121,7 +124,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mIconSearch = (ImageView)findViewById(R.id.ic_magnify);
 
         //View search place detail variable
-       // mPlaceDetailsText = (TextView) findViewById(R.id.place_details);
         mCurrentAddress = (TextView) findViewById(R.id.current_address_text);
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -184,12 +186,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             public void onClick(View v) {
                 if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
-                   // btnBottomSheet.setText("Close sheet");
+                    //Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
                 } else {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                    Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
-                    //btnBottomSheet.setText("Expand sheet");
+                    //Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -206,7 +206,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
 
     private void initSearch(){
-        Log.d(TAG, "Init: initializing");
+        Log.d(TAG, "initSearch: Init autocomple search location.");
 
         // Register a listener that receives callbacks when a suggestion has been selected
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
@@ -277,20 +277,28 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         String searchString = mSearchText.getText().toString();
         Geocoder geocoder = new Geocoder(BusMapsActivity.this);
-        List<Address> list = new ArrayList<>();
+        List<Address> addresses = new ArrayList<>();
 
         try {
-            list = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
         }catch (IOException e){
             Log.d(TAG, "showCurrentAddress: IOexception: "+ e.getMessage());
         }
+        // Handle case where no address was found.
+        if (addresses == null || addresses.size()  == 0) {
+            Log.d(TAG, "showCurrentAddress: Get address string is fail");
+        } else {
+            Address address = addresses.get(0);
+            ArrayList<String> addressFragments = new ArrayList<String>();
 
-        if(list.size() > 0){
-            Address address = list.get(0);
-            Log.d(TAG, "showCurrentAddress: found address" + address.toString());
+            // Fetch the address lines using getAddressLine,
+            // join them, and send them to the thread.
+            for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
+                addressFragments.add(address.getAddressLine(i));
+            }
 
-            mCurrentAddress.setText(address.getThoroughfare().toString());
-           // moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
+            mCurrentAddress.setText(TextUtils.join(System.getProperty("line.separator"),
+                    addressFragments));
         }
     }
     private void getLocationPermission(){
@@ -335,7 +343,50 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             getDeviceLocation();
         }
 
+        /* Add event touch or tap on map */
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+
+                showMarkerForClickEvent(point);
+
+                System.out.println(point.latitude+"---"+ point.longitude);
+            }
+        });
     }
+    private void showMarkerForClickEvent(LatLng point){
+        if(markerArray.size() >= 2){
+            for(int i = 0; i < markerArray.size(); i++){
+                markerArray.get(i).remove();
+            }
+            markerArray.clear();
+            MarkerOptions marker = new MarkerOptions().position(
+                    new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
+            markerArray.add(0,mMap.addMarker(marker));
+
+            Toast.makeText(BusMapsActivity.this, "first and second != null", Toast.LENGTH_SHORT).show();
+        }else if(markerArray.size() == 1){
+            MarkerOptions marker = new MarkerOptions().position(
+                    new LatLng(point.latitude, point.longitude)).title("Second Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerArray.add(1,mMap.addMarker(marker));
+            Toast.makeText(BusMapsActivity.this, "second == null", Toast.LENGTH_SHORT).show();
+        }else{
+            MarkerOptions marker = new MarkerOptions().position(
+                    new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+            markerArray.add(0,mMap.addMarker(marker));
+
+            Toast.makeText(BusMapsActivity.this, "first == null", Toast.LENGTH_SHORT).show();
+        }
+
+        for(int i = 0; i < markerArray.size(); i++){
+            markerArray.get(i).showInfoWindow();
+        }
+
+    }
+
     protected synchronized void buildGoogleApiClient(){
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -362,12 +413,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     if (task.isSuccessful() && task.getResult() != null) {
-                        Log.d(TAG, "onComplete: found location");
                         Location currentLocation = task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10.0f, "Your location");
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
-                        Log.d(TAG, "onComplete: current location is null");
                         mCurrentAddress.setText("Unable defind your location!");
                         Toast.makeText(BusMapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
                     }
@@ -389,10 +438,22 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
+        drawCircle(latlng);
 
         hideSoftKeyboard();
     }
 
+    private Circle drawCircle(LatLng latLng){
+
+        CircleOptions options = new CircleOptions()
+                .center(latLng)
+                .radius(1000)
+                .fillColor(Color.parseColor("#500084d3"))
+                .strokeColor(Color.BLUE)
+                .strokeWidth(1);
+
+        return mMap.addCircle(options);
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequest PermissionsResult: called.");
@@ -419,24 +480,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     public void onLocationChanged(Location location) {
         //lastLocation = location;
         Log.d(TAG, "Event location changed: " + location.getLatitude()+", " + location.getAltitude());
-        /*if(currentLocationMarker != null)
-        {
-            currentLocationMarker.remove();
-        }
 
-        LatLng latlng = new LatLng(location.getLatitude(), location.getAltitude());
-
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latlng);
-        markerOptions.title("Current Location");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-
-        currentLocationMarker = mMap.addMarker(markerOptions);
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-        mMap.animateCamera(CameraUpdateFactory.zoomBy(10));
-
-        if(client != null)
+        /*if(client != null)
         {
             mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
         }*/
@@ -551,9 +596,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 final Place place = places.get(0);
 
                 // Format details of the place for display and show it in a TextView.
-                /*mCurrentAddress.setText(formatPlaceDetails(getResources(), place.getName(),
-                        place.getId(), place.getAddress(), place.getPhoneNumber(),
-                        place.getWebsiteUri()));*/
                 mCurrentAddress.setText(formatPlaceDetails(getResources(), place.getName(),
                         place.getId(), place.getAddress(), place.getPhoneNumber(),
                         place.getWebsiteUri()));
@@ -582,10 +624,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     private static Spanned formatPlaceDetails(Resources res, CharSequence name, String id,
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
+        return Html.fromHtml(res.getString(R.string.place_details, address));
 
     }
 }
