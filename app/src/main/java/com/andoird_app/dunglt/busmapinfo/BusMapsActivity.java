@@ -126,7 +126,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 
     // Array of strings...
-    ListView busLivewView;
+    ListView busListView;
     ArrayList<String> busStationList;
     /**
      * Callback for changes in location.
@@ -421,7 +421,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                     @Override
                     public void onResponse(JSONArray response) {
                         // display response
-                        //  Log.d("Response", response.toString());
+                          Log.d("Response", response.toString());
                         if(response.length() > 0) {
                             busStationList = new ArrayList<String>();
 
@@ -429,16 +429,17 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
-                                    busStationList.add(obj.getString("name") + " " + obj.getString("street"));
+                                    busStationList.add(obj.getString("Name") + " " + obj.getString("Street"));
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                             }
-                            Log.d(TAG, "Foramt data: "+ busStationList.toString());
-                            /*simpleList = (ListView) findViewById(R.id.bus_list_around);
-                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, countryList);
-                            simpleList.setAdapter(arrayAdapter);*/
+                            if(busStationList.size() > 0) {
+                                busListView = (ListView) findViewById(R.id.bus_list_around);
+                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, busStationList);
+                                busListView.setAdapter(arrayAdapter);
+                            }
                         }
                     }
                 },
