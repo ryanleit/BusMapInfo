@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -56,10 +57,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -367,18 +374,25 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
             markerArray.add(0,mMap.addMarker(marker));
 
-            Toast.makeText(BusMapsActivity.this, "first and second != null", Toast.LENGTH_SHORT).show();
         }else if(markerArray.size() == 1){
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("Second Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             markerArray.add(1,mMap.addMarker(marker));
-            Toast.makeText(BusMapsActivity.this, "second == null", Toast.LENGTH_SHORT).show();
+
+            BusInfoApi busApi = new BusInfoApi();
+            JSONArray data = busApi.getBusInfo(this, markerArray);
+            if(data != null) {
+                Log.d(TAG, "Data API RETURN: " + data.toString());
+            }
+            /*Polygon polygon = mMap.addPolygon(new PolygonOptions()
+                    .add(new LatLng(markerArray.get(0).getPosition().latitude, markerArray.get(0).getPosition().longitude),
+                            new LatLng(markerArray.get(1).getPosition().latitude, markerArray.get(1).getPosition().longitude))
+                    .strokeColor(Color.RED)
+                    .fillColor(Color.BLUE));*/
         }else{
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             markerArray.add(0,mMap.addMarker(marker));
-
-            Toast.makeText(BusMapsActivity.this, "first == null", Toast.LENGTH_SHORT).show();
         }
 
         for(int i = 0; i < markerArray.size(); i++){
