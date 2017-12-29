@@ -45,6 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@+id/my_location_icon"
             android:textColor="#444"
+            android:textStyle="bold"
            />
 
         <!--<ImageView
@@ -55,13 +56,28 @@
             android:background="@drawable/ic_bus"-->
             />
     </RelativeLayout>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_margin"
-        android:text="Bus station around:"
-        android:textColor="#444"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:id="@+id/ic_bus_station_t"
+            android:src="@drawable/ic_bus_station_title"
+            android:layout_marginRight="2dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/ic_bus_station_t"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/number_stations"
+            android:text="..."
+            android:textColor="#444"
+            android:textSize="10dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

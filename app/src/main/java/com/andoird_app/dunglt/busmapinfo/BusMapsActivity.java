@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.solver.widgets.Rectangle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -34,7 +33,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.andoird_app.dunglt.busmapinfo.models.BusStation;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -65,10 +63,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -79,7 +73,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +114,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     LinearLayout layoutBusList;
     BottomSheetBehavior sheetBehavior;
     TextView mCurrentAddress;
+    TextView mNumberBusStations;
 
     //Maker for get Bus list around between two point
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
@@ -128,6 +122,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     // Array of strings...
     ListView busListView;
     ArrayList<String> busStationList;
+    ArrayList<Marker> busStationMarkers;
     /**
      * Callback for changes in location.
      */
@@ -285,7 +280,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         if(list.size() > 0){
             Address address = list.get(0);
             Log.d(TAG, "geoLocate: found address" + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+
             mCurrentAddress.setText(address.getLocality().toString());
             moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
         }
@@ -423,14 +418,22 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                         // display response
                           Log.d("Response", response.toString());
                         if(response.length() > 0) {
-                            busStationList = new ArrayList<String>();
+                            CharSequence textNumberBusStation = "Have " + Integer.toString(response.length()) + " bus stations around you.";
+                            mNumberBusStations = (TextView)findViewById(R.id.number_stations);
+                            mNumberBusStations.setText(textNumberBusStation);
 
+                            busStationList = new ArrayList<String>();
+                            busStationMarkers = new ArrayList<Marker>();
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
+
                                     busStationList.add(obj.getString("Name") + " " + obj.getString("Street"));
 
+                                    busStationMarkers.add(mMap.addMarker(new MarkerOptions()
+                                            .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name))));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -440,6 +443,9 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, busStationList);
                                 busListView.setAdapter(arrayAdapter);
                             }
+                        }else{
+                            mNumberBusStations.setText("Can not find out bus station");
+                            //Remove List Bus on List view
                         }
                     }
                 },
