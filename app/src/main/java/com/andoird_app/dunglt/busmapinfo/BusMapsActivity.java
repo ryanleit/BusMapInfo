@@ -34,6 +34,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andoird_app.dunglt.busmapinfo.models.BusStation;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -67,11 +75,15 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
@@ -114,12 +126,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private ArrayList<Marker> markerArray = new ArrayList<Marker>();
 
     // Array of strings...
-    ListView simpleList;
-    String countryList[] = {"India", "China", "australia", "Portugle", "America", "NewZealand"};
+    ListView busLivewView;
+    ArrayList<String> busStationList;
     /**
      * Callback for changes in location.
      */
     private LocationCallback mLocationCallback;
+
+    private final String authKey = "33044a4fc0d44b7ba4441a0f09c60381";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,12 +179,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
-                        //btnBottomSheet.setText("Close Sheet");
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
-                        //btnBottomSheet.setText("Expand Sheet");
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -206,9 +218,9 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
          * SOURCE CODE FOR LIST VIEW
          * ***********************************************
          */
-        simpleList = (ListView)findViewById(R.id.bus_list_around);
+       /* simpleList = (ListView)findViewById(R.id.bus_list_around);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.bus_detail, countryList);
-        simpleList.setAdapter(arrayAdapter);
+        simpleList.setAdapter(arrayAdapter);*/
     }
 
 
@@ -380,10 +392,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             markerArray.add(1,mMap.addMarker(marker));
 
             BusInfoApi busApi = new BusInfoApi();
-            JSONArray data = busApi.getBusInfo(this, markerArray);
-            if(data != null) {
-                Log.d(TAG, "Data API RETURN: " + data.toString());
-            }
+            requestData(busApi.getUrlRequestBusInfo(markerArray));
+
             /*Polygon polygon = mMap.addPolygon(new PolygonOptions()
                     .add(new LatLng(markerArray.get(0).getPosition().latitude, markerArray.get(0).getPosition().longitude),
                             new LatLng(markerArray.get(1).getPosition().latitude, markerArray.get(1).getPosition().longitude))
@@ -399,6 +409,58 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             markerArray.get(i).showInfoWindow();
         }
 
+    }
+    public void requestData(String uri) {
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // prepare the Request
+        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
+                new Response.Listener<JSONArray>()
+                {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // display response
+                        //  Log.d("Response", response.toString());
+                        if(response.length() > 0) {
+                            busStationList = new ArrayList<String>();
+
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject obj = null;
+                                try {
+                                    obj = response.getJSONObject(i);
+                                    busStationList.add(obj.getString("name") + " " + obj.getString("street"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                            Log.d(TAG, "Foramt data: "+ busStationList.toString());
+                            /*simpleList = (ListView) findViewById(R.id.bus_list_around);
+                            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, countryList);
+                            simpleList.setAdapter(arrayAdapter);*/
+                        }
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(TAG, "Error: " + error.getMessage());
+                    }
+                }
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<String, String>();
+                //  params.put("Content-Type", "application/json");
+                params.put("api_key", authKey);
+                return params;
+            }
+
+        };
+        // add it to the RequestQueue
+        queue.add(getRequest);
     }
 
     protected synchronized void buildGoogleApiClient(){

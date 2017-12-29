@@ -24,12 +24,16 @@ public class BusInfoApi extends VolleyApi{
 
     private final String TAG = "BusInfoApi";
 
-    public JSONArray getBusInfo(Context context, ArrayList latlngArr){
+    public String getUrlRequestBusInfo(ArrayList latlngArr){
         Marker position1 = (Marker) latlngArr.get(0);
         Marker position2 = (Marker) latlngArr.get(1);
         String url = urlRequestApi + "/businfo/getstopsinbounds/"+position1.getPosition().longitude + "/"+position1.getPosition().latitude + "/"+position2.getPosition().longitude + "/"+position2.getPosition().latitude ;
         Log.d(TAG, url);
-        this.getRequestJsonArrayApi(context, url);
+        return url;
+    }
+    public JSONArray getBusInfo(Context context, ArrayList latlngArr){
+
+        this.getRequestJsonArrayApi(context, getUrlRequestBusInfo(latlngArr));
 
         return this.dataApiReturn;
     }

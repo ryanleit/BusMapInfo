@@ -2,8 +2,11 @@ package com.andoird_app.dunglt.busmapinfo;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.andoird_app.dunglt.busmapinfo.models.BusStation;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +36,11 @@ public class VolleyApi {
 
     private final String TAG = "VolleyApi";
 
+    static List<BusStation> busStationList;
+
+    // variables for list view
+    ListView simpleList;
+
     protected void getRequestJsonArrayApi(Context context, String url){
         queue = Volley.newRequestQueue(context);
 
@@ -43,8 +52,7 @@ public class VolleyApi {
                     public void onResponse(JSONArray response) {
                         // display response
                        //  Log.d("Response", response.toString());
-
-                         dataApiReturn = response;
+                        dataApiReturn = response;
                     }
                 },
                 new Response.ErrorListener()
