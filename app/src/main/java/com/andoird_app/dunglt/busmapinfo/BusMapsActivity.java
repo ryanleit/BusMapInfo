@@ -2,6 +2,7 @@ package com.andoird_app.dunglt.busmapinfo;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -33,6 +35,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andoird_app.dunglt.busmapinfo.models.BusStation;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -113,6 +116,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     LinearLayout layoutBusList;
     BottomSheetBehavior sheetBehavior;
+    FloatingActionButton mBtnBusFloat;
     TextView mCurrentAddress;
     TextView mNumberBusStations;
 
@@ -121,7 +125,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     // Array of strings...
     ListView busListView;
-    ArrayList<String> busStationList;
+    ArrayList<BusStation> busStationList;
     ArrayList<Marker> busStationMarkers;
     /**
      * Callback for changes in location.
@@ -207,17 +211,18 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
-
-        /**
-         * ***********************************************
-         * SOURCE CODE FOR LIST VIEW
-         * ***********************************************
-         */
-       /* simpleList = (ListView)findViewById(R.id.bus_list_around);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.activity_listview, R.id.bus_detail, countryList);
-        simpleList.setAdapter(arrayAdapter);*/
+        mBtnBusFloat = new FloatingActionButton(this);
+        mBtnBusFloat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                } else {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
     }
-
 
     private void initSearch(){
         Log.d(TAG, "initSearch: Init autocomple search location.");
@@ -346,8 +351,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             return;
         }
         mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setIndoorLevelPickerEnabled(true);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        //mMap.getUiSettings().setZoomControlsEnabled(true);
 
         if (mLocationPermissionsGranted) {
             Log.d(TAG, "Location permission is granted!");
@@ -358,15 +362,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
         /* Add event touch or tap on map */
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng point) {
 
-                showMarkerForClickEvent(point);
+            showMarkerForClickEvent(point);
 
-                System.out.println(point.latitude+"---"+ point.longitude);
+            System.out.println(point.latitude+"---"+ point.longitude);
             }
         });
     }
@@ -415,21 +418,28 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 {
                     @Override
                     public void onResponse(JSONArray response) {
+                        mNumberBusStations = (TextView)findViewById(R.id.number_stations);
+                        busListView = (ListView) findViewById(R.id.bus_list_around);
+                        //Reset bus Station list
+                        resetBusStationList();
                         // display response
-                          Log.d("Response", response.toString());
                         if(response.length() > 0) {
                             CharSequence textNumberBusStation = "Have " + Integer.toString(response.length()) + " bus stations around you.";
-                            mNumberBusStations = (TextView)findViewById(R.id.number_stations);
                             mNumberBusStations.setText(textNumberBusStation);
-
-                            busStationList = new ArrayList<String>();
+                            busStationList = new ArrayList<BusStation>();
                             busStationMarkers = new ArrayList<Marker>();
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
-
-                                    busStationList.add(obj.getString("Name") + " " + obj.getString("Street"));
+                                    BusStation busStation = new BusStation(obj.getInt("StopId"),
+                                            obj.getString("Name"),
+                                            obj.getString("StopType"),
+                                            obj.getString("AddressNo"),
+                                            obj.getString("Street"),
+                                            new LatLng(obj.getDouble("Lat"),obj.getDouble("Lng"))
+                                    );
+                                    busStationList.add(busStation);
 
                                     busStationMarkers.add(mMap.addMarker(new MarkerOptions()
                                             .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
@@ -439,13 +449,18 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 }
                             }
                             if(busStationList.size() > 0) {
-                                busListView = (ListView) findViewById(R.id.bus_list_around);
-                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, busStationList);
+                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.this, busStationList);
                                 busListView.setAdapter(arrayAdapter);
+
+                                busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
+                                        intent.putExtra("position",position);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
-                        }else{
-                            mNumberBusStations.setText("Can not find out bus station");
-                            //Remove List Bus on List view
                         }
                     }
                 },
@@ -469,7 +484,20 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         // add it to the RequestQueue
         queue.add(getRequest);
     }
+    // reset List View for bus station list
+    private void resetBusStationList(){
+        mNumberBusStations.setText("Can not find out bus station");
 
+        //remove bus station marker
+        if(busStationMarkers != null && busStationMarkers.size() >0){
+            for(int i = 0; i < busStationMarkers.size(); i++){
+                busStationMarkers.get(i).remove();
+            }
+        }
+        //reset list view
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, new ArrayList<String>());
+        busListView.setAdapter(arrayAdapter);
+    }
     protected synchronized void buildGoogleApiClient(){
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)

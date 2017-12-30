@@ -3,36 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bus_list_info"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="400dp"
     android:background="#fafaf9"
     android:orientation="vertical"
     android:padding="@dimen/activity_margin"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="100dp"
+    app:behavior_peekHeight="120dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-    <!--<LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Current location"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </LinearLayout>-->
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
             android:id="@+id/my_location_icon"
             android:layout_alignParentStart="true"
-            android:layout_marginRight="2dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="12dp"
             android:background="@drawable/ic_my_location"/>
 
         <TextView
@@ -44,26 +34,21 @@
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_centerHorizontal="true"
             android:layout_toRightOf="@+id/my_location_icon"
-            android:textColor="#444"
+            android:textColor="#444444"
             android:textStyle="bold"
            />
-
-        <!--<ImageView
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_bus"-->
-            />
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
             android:layout_alignParentStart="true"
             android:id="@+id/ic_bus_station_t"
+            android:background="@drawable/oval_shape"
             android:src="@drawable/ic_bus_station_title"
             android:layout_marginRight="2dp"/>
         <TextView
@@ -75,7 +60,7 @@
             android:id="@+id/number_stations"
             android:text="..."
             android:textColor="#444"
-            android:textSize="10dp"
+            android:textSize="14dp"
             android:textStyle="bold" />
     </RelativeLayout>
     <ListView
@@ -84,39 +69,16 @@
         android:id="@+id/bus_list_around"
         android:divider="#f00"
         android:dividerHeight="1dp"
-        android:listSelector="#d8dada">
+        android:listSelector="#bff2f2">
     </ListView>
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/bus_one_info"
-        android:text="" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Paneer Tikka 1x2" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_margin"
-        android:text="Delivery Address"
-        android:textColor="#444"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />-->
-
-    <Button
+    <!--<Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="#000"
         android:foreground="?attr/selectableItemBackground"
         android:text="Action"
-        android:textColor="#fff" />
+        android:textColor="#fff" />-->
 
 </LinearLayout>

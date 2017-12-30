@@ -14,8 +14,6 @@ package com.andoird_app.dunglt.busmapinfo;
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.style.CharacterStyle;

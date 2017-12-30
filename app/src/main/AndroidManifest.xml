@@ -36,14 +36,17 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_bus_maps">
+            android:label="Main Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BusMapsActivity"></activity>
+        <activity
+            android:name=".BusMapsActivity"
+            android:label="@string/title_activity_bus_maps"></activity>
+        <activity android:name=".BusStationDetailActivity"></activity>
     </application>
 
 </manifest>
