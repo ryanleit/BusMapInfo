@@ -22,7 +22,7 @@
             android:id="@+id/my_location_icon"
             android:layout_alignParentStart="true"
             android:layout_marginRight="5dp"
-            android:layout_marginLeft="12dp"
+            android:layout_marginLeft="10dp"
             android:background="@drawable/ic_my_location"/>
 
         <TextView
@@ -44,8 +44,8 @@
         android:layout_marginBottom="5dp">
 
         <ImageView
-            android:layout_width="50dip"
-            android:layout_height="50dip"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
             android:layout_alignParentStart="true"
             android:id="@+id/ic_bus_station_t"
             android:background="@drawable/oval_shape"
