@@ -390,13 +390,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             markerArray.add(1,mMap.addMarker(marker));
 
             BusInfoApi busApi = new BusInfoApi();
-            requestData(busApi.getUrlRequestBusInfo(markerArray));
+            requestBusStationListApi(busApi.getUrlRequestBusStationInfo(markerArray));
 
-            /*Polygon polygon = mMap.addPolygon(new PolygonOptions()
-                    .add(new LatLng(markerArray.get(0).getPosition().latitude, markerArray.get(0).getPosition().longitude),
-                            new LatLng(markerArray.get(1).getPosition().latitude, markerArray.get(1).getPosition().longitude))
-                    .strokeColor(Color.RED)
-                    .fillColor(Color.BLUE));*/
         }else{
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
@@ -408,7 +403,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         }
 
     }
-    public void requestData(String uri) {
+    public void requestBusStationListApi(String uri) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
@@ -419,7 +414,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                     @Override
                     public void onResponse(JSONArray response) {
                         mNumberBusStations = (TextView)findViewById(R.id.number_stations);
-                        busListView = (ListView) findViewById(R.id.bus_list_around);
+                        busListView = (ListView) findViewById(R.id.bus_station_list_around);
                         //Reset bus Station list
                         resetBusStationList();
                         // display response
@@ -495,7 +490,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             }
         }
         //reset list view
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.activity_listview, R.id.bus_detail, new ArrayList<String>());
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.bus_station_listview, R.id.bus_detail, new ArrayList<String>());
         busListView.setAdapter(arrayAdapter);
     }
     protected synchronized void buildGoogleApiClient(){

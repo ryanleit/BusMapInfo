@@ -30,6 +30,16 @@ public class MainActivity extends AppCompatActivity {
         if (isServicesOK()){
             init();
         }
+
+        Button btnBusStationDetail= (Button) findViewById(R.id.btnBusStationDetail);
+
+        btnBusStationDetail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, BusStationDetailActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void init(){
@@ -42,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     public boolean isServicesOK()
