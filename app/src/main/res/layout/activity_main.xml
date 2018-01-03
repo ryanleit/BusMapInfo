@@ -53,6 +53,6 @@
             android:layout_alignParentBottom="true"
             android:gravity="bottom"
             android:textStyle="italic"
-            android:text="     Copyright @ ryanle © 2017 - 2018 Privacy Policy"/>
+            android:text="     Copyright @ dzungle © 2017 - 2018 Privacy Policy"/>
     </RelativeLayout>
 </LinearLayout>

@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by WIN10 on 12/30/2017.
  */
@@ -20,13 +22,21 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
 
     TabLayout tabLayout;
 
+    /* Bus station params */
+    Integer mStopId;
+    double[] mCurrentLatlng, mBustationLatlng;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bus_station_detail_activity);
         Intent i = getIntent();
-        Integer position = i.getIntExtra ("position",1);
-        Toast.makeText(BusStationDetailActivity.this, "Item "+ Integer.toString(position)+ " is clicked!", Toast.LENGTH_SHORT).show();
+        mStopId = i.getIntExtra ("mStopId",199);
+        mCurrentLatlng = i.getDoubleArrayExtra("mCurrentLatlng");
+        mBustationLatlng = i.getDoubleArrayExtra("mBusStationLatlng");
+
+        //Toast.makeText(BusStationDetailActivity.this, "Item "+ Integer.toString(mStopId)+ " is clicked!", Toast.LENGTH_SHORT).show();
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Bus Station Detail");
@@ -51,7 +61,7 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         PagerAdapter pagerAdapter;
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2, mStopId, mCurrentLatlng, mBustationLatlng);
 
         viewPager.setAdapter(pagerAdapter);
 

@@ -47,12 +47,12 @@ import java.util.Map;
 public class BusListTab extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_STOPID = "mStopId";
+    //private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Integer mStopId;
+  //  private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -71,17 +71,16 @@ public class BusListTab extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BusListTab.
      */
     // TODO: Rename and change types and number of parameters
-    public static BusListTab newInstance(String param1, String param2) {
+    public static BusListTab newInstance(Integer param1) {
         BusListTab fragment = new BusListTab();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_STOPID, param1);
+       // args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-        Log.d(TAG,"Tab 1 params: " + param1);
+        Log.d(TAG,"Tab 1 params: " + Integer.toString(param1));
         return fragment;
     }
 
@@ -89,8 +88,8 @@ public class BusListTab extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mStopId = getArguments().getInt(ARG_STOPID);
+          //  mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
     }
@@ -101,7 +100,8 @@ public class BusListTab extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bus_list_tab, container, false);
         busListView = (ListView) view.findViewById(R.id.bus_list);
         BusInfoApi busApi = new BusInfoApi();
-        requestBusListApi(busApi.getUrlRequestBusList(199));
+        Log.d(TAG, "stopId: " + Integer.toString(mStopId));
+        requestBusListApi(busApi.getUrlRequestBusList(mStopId));
         // Inflate the layout for this fragment
         return view;
     }

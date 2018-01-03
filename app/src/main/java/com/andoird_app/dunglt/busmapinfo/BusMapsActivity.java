@@ -451,7 +451,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
-                                        intent.putExtra("position",position);
+                                        intent.putExtra("mStopId", 199);
+                                        intent.putExtra("mCurrentLatlng", new double[]{10.803425,106.703789});
+                                        intent.putExtra("mBusStationLatlng", new double[]{10.841220, 106.742889});
+
                                         startActivity(intent);
                                     }
                                 });

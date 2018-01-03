@@ -17,7 +17,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -33,15 +35,15 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
 
     final static String TAG = "DirectionTab";
     private GoogleMap mMap;
-    Context mContext;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_CURRENT_LATLNG = "mCurrentLatlng";
+    private static final String ARG_BUS_STATION_LATLNG = "mBusStationLatlng";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private double[] mCurrentLatlng;
+    private double[] mBusStationLatlng;
 
     private OnFragmentInteractionListener mListener;
 
@@ -58,11 +60,11 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment DirectionTab.
      */
     // TODO: Rename and change types and number of parameters
-    public static DirectionTab newInstance(String param1, String param2) {
+    public static DirectionTab newInstance(double[] param1, double[] param2) {
         DirectionTab fragment = new DirectionTab();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putDoubleArray(ARG_CURRENT_LATLNG, param1);
+        args.putDoubleArray(ARG_BUS_STATION_LATLNG, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -71,8 +73,10 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mCurrentLatlng = getArguments().getDoubleArray(ARG_CURRENT_LATLNG);
+            mBusStationLatlng = getArguments().getDoubleArray(ARG_BUS_STATION_LATLNG);
+
+            Log.d(TAG, "Latlng Data: " + Double.toString(mCurrentLatlng[0])+ ", "+Double.toString(mCurrentLatlng[1]));
         }
     }
 
@@ -114,11 +118,14 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d(TAG, "onMapReady: googlemap is alreadt. ");
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(10.788441, 106.699698);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Ho Chi Minh City"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng currentLatlng = new LatLng(mCurrentLatlng[0], mCurrentLatlng[1]);
+        mMap.addMarker(new MarkerOptions().position(currentLatlng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, 10));
+
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        mMap.getUiSettings().setCompassEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
         if (ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -131,6 +138,7 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
             return;
         }
         mMap.setMyLocationEnabled(true);
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

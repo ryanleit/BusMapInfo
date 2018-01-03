@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, BusStationDetailActivity.class);
+                intent.putExtra("mStopId", 199);
+                intent.putExtra("mCurrentLatlng", new double[]{10.803425,106.703789});
+                intent.putExtra("mBusStationLatlng", new double[]{10.841220, 106.742889});
                 startActivity(intent);
             }
         });

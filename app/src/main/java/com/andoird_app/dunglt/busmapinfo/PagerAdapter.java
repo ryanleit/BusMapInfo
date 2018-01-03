@@ -6,17 +6,23 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by dunglt on 1/2/2018.
  */
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    Integer mNoOfTabs;
+    Integer mNoOfTabs, mStopId;
+    double[] mCurrentLatlng, mBusStationLatlng;
 
-    public PagerAdapter(FragmentManager fm, Integer NumberOfTabs) {
+    public PagerAdapter(FragmentManager fm, Integer NumberOfTabs, Integer stopId, double[] currentLatlng, double[] busStationLatlng) {
         super(fm);
         this.mNoOfTabs = NumberOfTabs;
+        this.mStopId = stopId;
+        this.mCurrentLatlng = currentLatlng;
+        this.mBusStationLatlng = busStationLatlng;
     }
 
     @Override
@@ -24,11 +30,11 @@ public class PagerAdapter extends FragmentPagerAdapter {
         Log.d("getItem", "position of item is: "+ Integer.toString(position));
         switch (position){
             case 0:
-                BusListTab busListTab = new BusListTab();
+                BusListTab busListTab = BusListTab.newInstance(mStopId);
                 return busListTab;
 
             case 1:
-                DirectionTab directionTab = new DirectionTab();
+                DirectionTab directionTab = DirectionTab.newInstance(mCurrentLatlng, mBusStationLatlng);
                 return directionTab;
 
             default:

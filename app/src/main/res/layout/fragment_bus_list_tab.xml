@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.andoird_app.dunglt.busmapinfo.BusListTab"
-    android:background="#d9f5c5">
+    tools:context="com.andoird_app.dunglt.busmapinfo.BusListTab">
 
     <!-- TODO: Update blank fragment layout -->
     <ListView
