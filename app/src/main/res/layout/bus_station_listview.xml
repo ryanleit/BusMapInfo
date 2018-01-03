@@ -30,7 +30,7 @@ android:padding="5dip" >
     android:layout_height="wrap_content"
     android:layout_alignTop="@+id/thumbnail"
     android:layout_toRightOf="@+id/thumbnail"
-    android:text="Undefine."
+    android:text="..."
     android:textColor="#040404"
     android:typeface="sans"
     android:textSize="15dip"
@@ -57,10 +57,10 @@ android:padding="5dip" >
     android:layout_alignParentRight="true"
     android:layout_alignTop="@id/bus_station_title"
     android:gravity="right"
-    android:text="100m"
+    android:text="Detail"
     android:layout_marginRight="5dip"
     android:textSize="10dip"
-    android:textColor="#10bcc9"
+    android:textColor="#0e4eb6"
     android:textStyle="bold"/>
 
 <!-- Rightend Arrow -->

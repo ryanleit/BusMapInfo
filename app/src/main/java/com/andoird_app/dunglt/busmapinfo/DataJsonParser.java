@@ -40,7 +40,7 @@ public class DataJsonParser {
 
                     busStationMarkers.add(mMap.addMarker(new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name))));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

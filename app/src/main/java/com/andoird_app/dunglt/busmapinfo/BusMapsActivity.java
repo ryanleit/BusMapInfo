@@ -215,6 +215,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mBtnBusFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Float buttion click event!");
                 if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 } else {
@@ -233,8 +234,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mGeoDataClient = Places.getGeoDataClient(this, null);
 
         mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGeoDataClient, LAT_LNG_BOUNDS, null);
-        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
+        mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
         mIconSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -438,24 +439,25 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
                                     busStationMarkers.add(mMap.addMarker(new MarkerOptions()
                                             .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name))));
+                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                             if(busStationList.size() > 0) {
-                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.this, busStationList);
+                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.this, busStationList, currentLocationMarker.getPosition());
                                 busListView.setAdapter(arrayAdapter);
 
                                 busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
+                                        Log.d(TAG,"Item click:" + parent.getAdapter().getItem(position).toString());
+                                        /*Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", 199);
                                         intent.putExtra("mCurrentLatlng", new double[]{10.803425,106.703789});
                                         intent.putExtra("mBusStationLatlng", new double[]{10.841220, 106.742889});
 
-                                        startActivity(intent);
+                                        startActivity(intent);*/
                                     }
                                 });
                             }
@@ -556,9 +558,9 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         CircleOptions options = new CircleOptions()
                 .center(latLng)
-                .radius(1000)
+                .radius(500)
                 .fillColor(Color.parseColor("#500084d3"))
-                .strokeColor(Color.BLUE)
+                .strokeColor(Color.parseColor("#50007fd3"))
                 .strokeWidth(1);
 
         return mMap.addCircle(options);
