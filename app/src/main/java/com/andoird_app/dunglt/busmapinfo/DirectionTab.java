@@ -1,8 +1,11 @@
 package com.andoird_app.dunglt.busmapinfo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,22 +84,24 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_direction_tab, container, false);
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        final SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.bus_detail_map);
-        if(mapFragment != null){
-            Log.d("DirectionTab","mapFragment is not null");
+        final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.bus_detail_map);
+        if (mapFragment != null) {
+            Log.d("DirectionTab", "mapFragment is not null");
             Toast.makeText(super.getContext(), "mapFragment is not null", Toast.LENGTH_SHORT).show();
             mapFragment.getMapAsync(this);
-        }else{
-            Log.d("DirectionTab","mapFragment is null");
+        } else {
+            Log.d("DirectionTab", "mapFragment is null");
             Toast.makeText(super.getContext(), "mapFragment is null", Toast.LENGTH_SHORT).show();
         }
 
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -111,9 +116,21 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         Log.d(TAG, "onMapReady: googlemap is alreadt. ");
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        LatLng sydney = new LatLng(10.788441, 106.699698);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Ho Chi Minh City"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        if (ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(super.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

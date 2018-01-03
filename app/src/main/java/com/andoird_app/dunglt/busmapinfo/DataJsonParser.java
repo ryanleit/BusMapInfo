@@ -1,12 +1,17 @@
 package com.andoird_app.dunglt.busmapinfo;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStation;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,33 +20,35 @@ import java.util.List;
  */
 
 public class DataJsonParser {
-        static List<BusStation> busStationList;
+        public static ArrayList<ArrayList> parseBusStationData(JSONArray datas, GoogleMap mMap) {
+            ArrayList<ArrayList> dataReturn = new ArrayList<ArrayList>();
+            ArrayList<BusStation> busStationList = new ArrayList<BusStation>();
+            ArrayList<Marker> busStationMarkers = new ArrayList<Marker>();
 
-        public static List<BusStation> parseData(JSONArray content) {
-
-            JSONArray bus_station_arr = null;
-            BusStation busStations = null;
-            try {
-                busStationList = new ArrayList<>();
-                BusStation busStation = null;
-                for (int i = 0; i < content.length(); i++) {
-                    JSONObject obj = content.getJSONObject(i);
-                    busStation = new BusStation(obj.getInt("stopId"),
-                            obj.getString("name"),
-                            obj.getString("stopType"),
-                            obj.getString("addressNo"),
-                            obj.getString("street"),
-                            new LatLng(obj.getDouble("lat"), obj.getDouble("lng"))
+            for (int i = 0; i < datas.length(); i++) {
+                JSONObject obj = null;
+                try {
+                    obj = datas.getJSONObject(i);
+                    BusStation busStation = new BusStation(obj.getInt("StopId"),
+                            obj.getString("Name"),
+                            obj.getString("StopType"),
+                            obj.getString("AddressNo"),
+                            obj.getString("Street"),
+                            new LatLng(obj.getDouble("Lat"),obj.getDouble("Lng"))
                     );
-
                     busStationList.add(busStation);
+
+                    busStationMarkers.add(mMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name))));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return busStationList;
             }
-            catch (JSONException ex) {
-                ex.printStackTrace();
-                return null;
-            }
+            dataReturn.add(busStationList);
+            dataReturn.add(busStationMarkers);
+
+            return dataReturn;
         }
 
 }
