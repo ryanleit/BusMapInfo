@@ -263,7 +263,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: click gps icon!");
-
                 getDeviceLocation();
             }
         });
@@ -451,13 +450,15 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        Log.d(TAG,"Item click:" + parent.getAdapter().getItem(position).toString());
-                                        /*Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
-                                        intent.putExtra("mStopId", 199);
-                                        intent.putExtra("mCurrentLatlng", new double[]{10.803425,106.703789});
-                                        intent.putExtra("mBusStationLatlng", new double[]{10.841220, 106.742889});
+                                        @SuppressWarnings("unchecked")
+                                        BusStation objStation = (BusStation) parent.getItemAtPosition(position);
 
-                                        startActivity(intent);*/
+                                        Intent intent = new Intent(BusMapsActivity.this, BusStationDetailActivity.class);
+                                        intent.putExtra("mStopId", objStation.getStopId());
+                                        intent.putExtra("mCurrentLatlng", new double[]{currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude});
+                                        intent.putExtra("mBusStationLatlng", new double[]{objStation.getLatLng().latitude, objStation.getLatLng().longitude});
+
+                                        startActivity(intent);
                                     }
                                 });
                             }

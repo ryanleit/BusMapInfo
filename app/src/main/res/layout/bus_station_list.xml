@@ -8,13 +8,12 @@
     android:orientation="vertical"
     android:padding="@dimen/activity_margin"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="120dp"
+    app:behavior_peekHeight="100dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="20dip"
@@ -69,7 +68,7 @@
         android:id="@+id/bus_station_list_around"
         android:divider="#f00"
         android:dividerHeight="1dp"
-        android:listSelector="#bff2f2">
+        android:listSelector="#eac77f">
     </ListView>
 
     <!--<Button

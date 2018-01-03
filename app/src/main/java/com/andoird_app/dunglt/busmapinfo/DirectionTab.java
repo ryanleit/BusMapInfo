@@ -121,6 +121,10 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         LatLng currentLatlng = new LatLng(mCurrentLatlng[0], mCurrentLatlng[1]);
         mMap.addMarker(new MarkerOptions().position(currentLatlng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+
+        LatLng busStationLatlng = new LatLng(mBusStationLatlng[0], mBusStationLatlng[1]);
+        mMap.addMarker(new MarkerOptions().position(busStationLatlng).title("Bus Station Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, 10));
 
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
