@@ -1,6 +1,7 @@
 package com.andoird_app.dunglt.busmapinfo;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -68,44 +69,48 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
                 Toast.makeText(BusStationDetailActivity.this, "Icon navigation click", Toast.LENGTH_SHORT).show();
             }
         });
+
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        BusInfoApi busApi = new BusInfoApi();
-
-        requestBusListApi(busApi.getUrlRequestBusList(mStopId));
-    }
-    public void setUpTabLayout(ArrayList<BusStationDetail> busStationInfo){
         TabLayout tabLayout =  (TabLayout) findViewById(R.id.tabLayout);
         //Adding the tabs using addTab() method
         tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab());
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#3a07e9"));
+
+        BusInfoApi busApi = new BusInfoApi();
+        requestBusListApi(busApi.getUrlRequestBusList(mStopId));
+    }
+
+    public void setUpTabLayout(){
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         PagerAdapter pagerAdapter;
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2, busStationInfo, mCurrentLatlng, mBustationLatlng);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2, mBusStationInfo, mCurrentLatlng, mBustationLatlng);
 
         viewPager.setAdapter(pagerAdapter);
 
-        tabLayout.setupWithViewPager(viewPager, true);
+        tabLayout.setupWithViewPager(viewPager);
     }
     // Request bus list API
     public void requestBusListApi(String uri){
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(TAG, "Call API");
+        Log.d(TAG, "Call API :" + uri);
         // prepare the Request
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
                 new Response.Listener<JSONArray>()
                 {
                     @Override
                     public void onResponse(JSONArray response) {
+                        Log.d(TAG,"Api response: " + response.toString());
+                        mBusStationInfo = new ArrayList<BusStationDetail>();
                         // display response
                         if(response.length() > 0) {
-                            mBusStationInfo = new ArrayList<BusStationDetail>();
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject obj = null;
                                 try {
@@ -142,10 +147,9 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
                                     e.printStackTrace();
                                 }
                             }
-                            Log.d(TAG, mBusStationInfo.toString());
-                            setUpTabLayout(mBusStationInfo);
-                            return;
                         }
+                        setUpTabLayout();
+                        return;
                     }
                 },
                 new Response.ErrorListener()

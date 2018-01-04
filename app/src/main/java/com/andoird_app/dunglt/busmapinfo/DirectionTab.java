@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,15 +87,26 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
 
             Log.d(TAG, "Latlng Data: " + Double.toString(mCurrentLatlng[0])+ ", "+Double.toString(mCurrentLatlng[1]));
         }
+        
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_direction_tab, container, false);
 
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.bus_station_info_list);
+        Recycler_View_Adapter adapter = new Recycler_View_Adapter(mBusStationInfo, super.getContext().getApplicationContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(super.getContext()));
 
+        //******
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(1000);
+        itemAnimator.setRemoveDuration(1000);
+        recyclerView.setItemAnimator(itemAnimator);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_direction_tab, container, false);
+        return view;
     }
 
     @Override
