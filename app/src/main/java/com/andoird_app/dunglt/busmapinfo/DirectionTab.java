@@ -13,14 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.andoird_app.dunglt.busmapinfo.models.BusStationDetail;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 
 /**
@@ -38,10 +40,12 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_BUS_STATION_INFO = "mBusStationInfo";
     private static final String ARG_CURRENT_LATLNG = "mCurrentLatlng";
     private static final String ARG_BUS_STATION_LATLNG = "mBusStationLatlng";
 
     // TODO: Rename and change types of parameters
+    private ArrayList<BusStationDetail> mBusStationInfo;
     private double[] mCurrentLatlng;
     private double[] mBusStationLatlng;
 
@@ -60,9 +64,10 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment DirectionTab.
      */
     // TODO: Rename and change types and number of parameters
-    public static DirectionTab newInstance(double[] param1, double[] param2) {
+    public static DirectionTab newInstance(ArrayList<BusStationDetail> param0, double[] param1, double[] param2) {
         DirectionTab fragment = new DirectionTab();
         Bundle args = new Bundle();
+        args.putSerializable(ARG_BUS_STATION_INFO, param0);
         args.putDoubleArray(ARG_CURRENT_LATLNG, param1);
         args.putDoubleArray(ARG_BUS_STATION_LATLNG, param2);
         fragment.setArguments(args);
@@ -73,6 +78,7 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mBusStationInfo =(ArrayList<BusStationDetail>)getArguments().getSerializable(ARG_BUS_STATION_INFO);
             mCurrentLatlng = getArguments().getDoubleArray(ARG_CURRENT_LATLNG);
             mBusStationLatlng = getArguments().getDoubleArray(ARG_BUS_STATION_LATLNG);
 
@@ -96,8 +102,6 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.bus_detail_map);
         if (mapFragment != null) {
-            Log.d("DirectionTab", "mapFragment is not null");
-            Toast.makeText(super.getContext(), "mapFragment is not null", Toast.LENGTH_SHORT).show();
             mapFragment.getMapAsync(this);
         } else {
             Log.d("DirectionTab", "mapFragment is null");
