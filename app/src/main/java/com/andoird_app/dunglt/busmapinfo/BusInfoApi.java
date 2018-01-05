@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.RequestQueue;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
 import org.json.JSONArray;
@@ -28,6 +29,12 @@ public class BusInfoApi extends VolleyApi{
         Marker position1 = (Marker) latlngArr.get(0);
         Marker position2 = (Marker) latlngArr.get(1);
         String url = urlRequestApi + "/businfo/getstopsinbounds/"+position1.getPosition().longitude + "/"+position1.getPosition().latitude + "/"+position2.getPosition().longitude + "/"+position2.getPosition().latitude ;
+        Log.d(TAG, url);
+        return url;
+    }
+
+    public String getUrlRequestBusStationInfoByBounds(LatLngBounds bounds){
+        String url = urlRequestApi + "/businfo/getstopsinbounds/"+bounds.northeast.longitude + "/"+bounds.northeast.latitude + "/"+bounds.southwest.longitude + "/"+bounds.southwest.latitude ;
         Log.d(TAG, url);
         return url;
     }

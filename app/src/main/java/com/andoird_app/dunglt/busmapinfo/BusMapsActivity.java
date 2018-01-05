@@ -70,6 +70,7 @@ import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -552,6 +553,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
         drawCircle(latlng);
 
+        /* request get bustation */
+        BusInfoApi busApi = new BusInfoApi();
+        requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(toBounds(new LatLng(currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude), 1000.0)));
+
         hideSoftKeyboard();
     }
 
@@ -566,6 +571,15 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         return mMap.addCircle(options);
     }
+    public LatLngBounds toBounds(LatLng center, double radiusInMeters) {
+        double distanceFromCenterToCorner = radiusInMeters * Math.sqrt(2.0);
+        LatLng southwestCorner =
+                SphericalUtil.computeOffset(center, distanceFromCenterToCorner, 225.0);
+        LatLng northeastCorner =
+                SphericalUtil.computeOffset(center, distanceFromCenterToCorner, 45.0);
+        return new LatLngBounds(southwestCorner, northeastCorner);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequest PermissionsResult: called.");
