@@ -66,6 +66,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.RuntimeRemoteException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -381,13 +382,13 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             }
             markerArray.clear();
             MarkerOptions marker = new MarkerOptions().position(
-                    new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    new LatLng(point.latitude, point.longitude)).title("First position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
             markerArray.add(0,mMap.addMarker(marker));
 
         }else if(markerArray.size() == 1){
             MarkerOptions marker = new MarkerOptions().position(
-                    new LatLng(point.latitude, point.longitude)).title("Second Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    new LatLng(point.latitude, point.longitude)).title("Second position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             markerArray.add(1,mMap.addMarker(marker));
 
             BusInfoApi busApi = new BusInfoApi();
@@ -395,7 +396,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         }else{
             MarkerOptions marker = new MarkerOptions().position(
-                    new LatLng(point.latitude, point.longitude)).title("First Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    new LatLng(point.latitude, point.longitude)).title("First position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
             markerArray.add(0,mMap.addMarker(marker));
         }
 
@@ -553,13 +554,26 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
         drawCircle(latlng);
 
+
         /* request get bustation */
         BusInfoApi busApi = new BusInfoApi();
-        requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(toBounds(new LatLng(currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude), 1000.0)));
+        LatLngBounds latLngBounds = toBounds(new LatLng(currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude), 1000.0);
+        requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds));
 
+        drawBounds(latLngBounds, Color.RED);
         hideSoftKeyboard();
     }
-
+    private void drawBounds (LatLngBounds bounds, int color) {
+        PolygonOptions polygonOptions =  new PolygonOptions()
+                .add(new LatLng(bounds.northeast.latitude, bounds.northeast.longitude))
+                .add(new LatLng(bounds.southwest.latitude, bounds.northeast.longitude))
+                .add(new LatLng(bounds.southwest.latitude, bounds.southwest.longitude))
+                .add(new LatLng(bounds.northeast.latitude, bounds.southwest.longitude))
+                .strokeColor(color);
+        mMap.addMarker(new MarkerOptions().position(new LatLng(bounds.northeast.latitude, bounds.northeast.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(bounds.southwest.latitude, bounds.southwest.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        mMap.addPolygon(polygonOptions);
+    }
     private Circle drawCircle(LatLng latLng){
 
         CircleOptions options = new CircleOptions()
