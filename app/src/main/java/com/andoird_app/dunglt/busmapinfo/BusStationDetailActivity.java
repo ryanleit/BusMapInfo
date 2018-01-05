@@ -75,7 +75,7 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
         final ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
 
-        TabLayout tabLayout =  (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout =  (TabLayout) findViewById(R.id.tabLayout);
         //Adding the tabs using addTab() method
         tabLayout.addTab(tabLayout.newTab());
         tabLayout.addTab(tabLayout.newTab());
