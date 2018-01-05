@@ -211,7 +211,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
-        mBtnBusFloat = new FloatingActionButton(this);
+        mBtnBusFloat = (FloatingActionButton)findViewById(R.id.btn_bus_float);
         mBtnBusFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

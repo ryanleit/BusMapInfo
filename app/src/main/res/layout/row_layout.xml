@@ -30,7 +30,7 @@
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/imageView"
             android:text="Title"
-            android:textSize="30sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/description"

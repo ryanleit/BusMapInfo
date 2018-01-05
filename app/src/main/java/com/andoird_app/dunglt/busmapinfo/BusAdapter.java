@@ -56,7 +56,9 @@ public class BusAdapter extends ArrayAdapter<Object> {
                 // Populate the data into the template view using the data object
                 tvName.setText(bus.getBusNumber());
                 tvBusInfor.setText("Duration: " + Integer.toString(bus.getTime())+ ", " + bus.getDateTime());
-                tvDistance.setText(Double.toString(bus.getDistance()) + "m");
+
+                Double distance = Math.round (bus.getDistance() * 100.0) / 100.0;
+                tvDistance.setText(Double.toString(distance) + "m");
 
                 break;
             case TYPE_DIVIDER:

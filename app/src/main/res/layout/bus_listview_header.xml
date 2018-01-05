@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="fill_parent"
 android:layout_height="wrap_content"
-android:background="#f458c1f5"
+android:background="#f4080808"
 android:orientation="horizontal"
 android:padding="5dip" >
 
@@ -31,7 +31,7 @@ android:padding="5dip" >
     android:layout_alignTop="@+id/bus_thumbnail"
     android:layout_toRightOf="@+id/bus_thumbnail"
     android:text="..."
-    android:textColor="#040404"
+    android:textColor="#faf8f8"
     android:typeface="sans"
     android:textSize="15dip"
     android:textStyle="bold"/>
@@ -42,7 +42,7 @@ android:padding="5dip" >
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_below="@id/bus_station_route"
-    android:textColor="#343434"
+    android:textColor="#faf8f8"
     android:textSize="12dip"
     android:textStyle="italic"
     android:layout_marginTop="1dip"

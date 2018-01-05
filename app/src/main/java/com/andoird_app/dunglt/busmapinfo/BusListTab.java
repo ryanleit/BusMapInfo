@@ -42,7 +42,6 @@ public class BusListTab extends Fragment {
     private final String authKey = "33044a4fc0d44b7ba4441a0f09c60381";
     final  static String  TAG = "BusListTab";
     ListView busListView;
-    ArrayList<Bus> busList;
 
     public BusListTab() {
         // Required empty public constructor
@@ -128,78 +127,6 @@ public class BusListTab extends Fragment {
         Log.d(TAG, "prepare buslisttab: " + data.toString());
         return data;
     }
-    // Request bus list API
-    /*public void requestBusListApi(String uri){
-        RequestQueue queue = Volley.newRequestQueue(super.getContext());
-        Log.d(TAG, "Call API");
-        // prepare the Request
-        JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
-                new Response.Listener<JSONArray>()
-                {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        Log.d(TAG, "API RESPONSE");
-                        // display response
-                        if(response.length() > 0) {
-                            busList = new ArrayList<Bus>();
-                            for (int i = 0; i < response.length(); i++) {
-                                JSONObject obj = null;
-                                try {
-                                    obj = response.getJSONObject(i);
-
-                                    Log.d(TAG, "DATA API: "+ obj.getJSONArray("arrs").toString());
-                                    JSONArray data = obj.getJSONArray("arrs");
-                                    for (int j = 0; j < data.length(); j++) {
-                                        JSONObject objBus = data.getJSONObject(j);
-
-                                        Bus bus = new Bus(objBus.getDouble("d"),
-                                                objBus.getDouble("s"),
-                                                objBus.getInt("t"),
-                                                objBus.getInt("sts"),
-                                                objBus.getString("dts"),
-                                                objBus.getString("v")
-                                        );
-                                        busList.add(bus);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                            if(busList.size() > 0) {
-                                BusAdapter arrayAdapter = new BusAdapter(BusListTab.super.getContext(), busList);
-                                busListView.setAdapter(arrayAdapter);
-
-                                busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                                    }
-                                });
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener()
-                {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(TAG, "Error: " + error.getMessage());
-                    }
-                }
-        ) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> params = new HashMap<String, String>();
-                //  params.put("Content-Type", "application/json");
-                params.put("api_key", authKey);
-                return params;
-            }
-
-        };
-        // add it to the RequestQueue
-        queue.add(getRequest);
-
-    }*/
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
