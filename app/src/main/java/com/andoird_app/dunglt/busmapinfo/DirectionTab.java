@@ -154,7 +154,7 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(currentLatlng).title("Current Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
 
         LatLng busStationLatlng = new LatLng(mBusStationLatlng[0], mBusStationLatlng[1]);
-        mMap.addMarker(new MarkerOptions().position(busStationLatlng).title("Bus Station Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
+        mMap.addMarker(new MarkerOptions().position(busStationLatlng).title("Bus Station Location").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker)));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatlng, 10));
 

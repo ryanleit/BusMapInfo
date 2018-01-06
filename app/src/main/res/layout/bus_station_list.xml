@@ -20,7 +20,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:id="@+id/ic_location_search">
+        android:id="@+id/ic_location_search"
+        android:background="#f2f2f2f7">
         <!--  ListRow Left sied Thumbnail image -->
        <!-- <LinearLayout android:id="@+id/bus_thumbnail"
             android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
             android:layout_marginBottom="@dimen/activity_margin"
             android:layout_centerHorizontal="true"
             android:textColor="#1a2ab6"
-            android:textSize="30dp"
+            android:textSize="20dp"
             android:textStyle="italic"
             />
     </RelativeLayout>
