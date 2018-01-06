@@ -38,14 +38,6 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="12dp"
             android:src="@drawable/ic_navbar" />
-        <ImageView
-            android:id="@+id/ic_magnify"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="12dp"
-            android:src="@drawable/ic_magnify" />
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
@@ -61,12 +53,28 @@
             android:hint="Enter Address City or Zip Code"
             android:imeOptions="actionSearch"/>
 
+        <Button
+            android:id="@+id/btn_clear"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/input_search"
+            android:background="@drawable/cleartext" />
+        <ImageView
+            android:id="@+id/ic_magnify"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/ic_magnify" />
     </RelativeLayout>
 
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@id/relLayout1"
+        android:background="@drawable/oval_shape"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"

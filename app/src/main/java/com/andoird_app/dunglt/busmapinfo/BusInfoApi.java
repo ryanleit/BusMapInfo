@@ -34,7 +34,7 @@ public class BusInfoApi extends VolleyApi{
     }
 
     public String getUrlRequestBusStationInfoByBounds(LatLngBounds bounds){
-        String url = urlRequestApi + "/businfo/getstopsinbounds/"+bounds.northeast.longitude + "/"+bounds.northeast.latitude + "/"+bounds.southwest.longitude + "/"+bounds.southwest.latitude ;
+        String url = urlRequestApi + "/businfo/getstopsinbounds/"+bounds.southwest.longitude + "/"+bounds.southwest.latitude+ "/" + bounds.northeast.longitude + "/" + bounds.northeast.latitude  ;
         Log.d(TAG, url);
         return url;
     }

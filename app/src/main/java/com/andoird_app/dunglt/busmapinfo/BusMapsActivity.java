@@ -2,6 +2,7 @@ package com.andoird_app.dunglt.busmapinfo;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -24,11 +25,13 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -102,7 +105,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     //vars
     private GoogleApiClient client;
     private LocationRequest locationRequest;
-    //private Location lastLocation;
+    private Location lastLocation;
     private Marker currentLocationMarker;
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -112,6 +115,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private AutoCompleteTextView mSearchText;
     private ImageView mGps;
     private ImageView mIconSearch;
+    private Button mClearText;
 
     //Auto complete
     protected GeoDataClient mGeoDataClient;
@@ -152,7 +156,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             getLocationPermission();
         }
 
-        Log.d(TAG, "Init Google Map!");
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -160,6 +163,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        /* Event clear text button */
+        mClearText = (Button)findViewById(R.id.btn_clear);
+        mClearText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchText.setText("");
+            }
+        });
         /**
          * *************************************
          * BUS LIST INFO BOTTOM SHEET
@@ -228,8 +239,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     }
 
     private void initSearch(){
-        Log.d(TAG, "initSearch: Init autocomple search location.");
-
         // Register a listener that receives callbacks when a suggestion has been selected
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         // Construct a GeoDataClient for the Google Places API for Android.
@@ -242,25 +251,24 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mIconSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: click icon search location!");
                 geoLocate();
             }
         });
-        /*mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                if(actionId == EditorInfo.IME_ACTION_SEARCH
+                /*if(actionId == EditorInfo.IME_ACTION_SEARCH
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER){
                     //execute our method for searching
                     geoLocate();
-                }
+                }*/
                 return false;
             }
         });
-    */
+
         mGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -370,8 +378,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             public void onMapClick(LatLng point) {
 
             showMarkerForClickEvent(point);
-
-            System.out.println(point.latitude+"---"+ point.longitude);
             }
         });
     }
@@ -419,33 +425,38 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                         busListView = (ListView) findViewById(R.id.bus_station_list_around);
                         //Reset bus Station list
                         resetBusStationList();
-                        // display response
                         if(response.length() > 0) {
-                            CharSequence textNumberBusStation = "Have " + Integer.toString(response.length()) + " bus stations around you.";
-                            mNumberBusStations.setText(textNumberBusStation);
+
                             busStationList = new ArrayList<BusStation>();
                             busStationMarkers = new ArrayList<Marker>();
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
-                                    BusStation busStation = new BusStation(obj.getInt("StopId"),
-                                            obj.getString("Name"),
-                                            obj.getString("StopType"),
-                                            obj.getString("AddressNo"),
-                                            obj.getString("Street"),
-                                            new LatLng(obj.getDouble("Lat"),obj.getDouble("Lng"))
-                                    );
-                                    busStationList.add(busStation);
+                                    if(obj.getString("Status").equals("Đang khai thác")) {
+                                        BusStation busStation = new BusStation(obj.getInt("StopId"),
+                                                obj.getString("Name"),
+                                                obj.getString("StopType"),
+                                                obj.getString("AddressNo"),
+                                                obj.getString("Street"),
+                                                new LatLng(obj.getDouble("Lat"), obj.getDouble("Lng"))
+                                        );
+                                        busStationList.add(busStation);
 
-                                    busStationMarkers.add(mMap.addMarker(new MarkerOptions()
-                                            .position(new LatLng(Double.parseDouble(obj.getString("Lat")),Double.parseDouble(obj.getString("Lng"))))
-                                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
+                                        busStationMarkers.add(mMap.addMarker(new MarkerOptions()
+                                                .position(new LatLng(Double.parseDouble(obj.getString("Lat")), Double.parseDouble(obj.getString("Lng"))))
+                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
+                                    }else{
+                                        Log.d(TAG, "ko khai thac.");
+                                    }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
                             if(busStationList.size() > 0) {
+                                CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around you.";
+                                mNumberBusStations.setText(textNumberBusStation);
+
                                 BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.this, busStationList, currentLocationMarker.getPosition());
                                 busListView.setAdapter(arrayAdapter);
 
@@ -464,6 +475,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                     }
                                 });
                             }
+                        }else {
+                            Log.d(TAG, "Data bus station return empty");
                         }
                     }
                 },
@@ -501,7 +514,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity.this, R.layout.bus_station_listview, R.id.bus_detail, new ArrayList<String>());
         busListView.setAdapter(arrayAdapter);
     }
-    protected synchronized void buildGoogleApiClient(){
+
+    protected void buildGoogleApiClient(){
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -531,8 +545,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10.0f, "Your location");
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
-                        mCurrentAddress.setText("Unable defind your location!");
-                        Toast.makeText(BusMapsActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        mCurrentAddress.setText("Unable define your location!");
+                        Toast.makeText(BusMapsActivity.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -544,7 +558,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private void moveCamera(LatLng latlng, float zoom, String title) {
         Log.d(TAG, "Move camera to location: " + latlng.latitude + ", " + latlng.longitude);
 
-     //   mMap.animateCamera(CameraUpdateFactory.zoomBy(DEFAULT_ZOOM));
         if(currentLocationMarker != null){
             currentLocationMarker.remove();
         }
@@ -560,7 +573,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         LatLngBounds latLngBounds = toBounds(new LatLng(currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude), 1000.0);
         requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds));
 
-        drawBounds(latLngBounds, Color.RED);
+        //drawBounds(latLngBounds, Color.RED);
         hideSoftKeyboard();
     }
     private void drawBounds (LatLngBounds bounds, int color) {
@@ -618,29 +631,26 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     @Override
     public void onLocationChanged(Location location) {
-        //lastLocation = location;
-        Log.d(TAG, "Event location changed: " + location.getLatitude()+", " + location.getAltitude());
+        lastLocation = location;
 
-        /*if(client != null)
+        //Place current location marker
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        moveCamera(latLng, DEFAULT_ZOOM, "Current position");
+
+        if(client != null)
         {
             mFusedLocationProviderClient.removeLocationUpdates(locationCallback);
-        }*/
+        }
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
+    public void onStatusChanged(String s, int i, Bundle bundle){}
 
     @Override
-    public void onProviderEnabled(String s) {
-
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String s) {
-
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -664,17 +674,15 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     };
 
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
+    public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
 
     private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
     }
 
     /*
