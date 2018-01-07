@@ -55,10 +55,10 @@
             android:id="@+id/current_address_text"
             android:text="..."
             android:layout_below="@id/current_address_title"
-            android:layout_marginBottom="@dimen/activity_margin"
+            android:layout_margin="@dimen/activity_margin"
             android:layout_centerHorizontal="true"
             android:textColor="#1a2ab6"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="italic"
             />
     </RelativeLayout>
@@ -74,7 +74,7 @@
             android:id="@+id/ic_bus_station_t"
             android:background="@drawable/blue_boder"
             android:src="@drawable/ic_bus_station_title"
-            android:layout_marginRight="2dp"/>
+            android:layout_marginRight="5dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

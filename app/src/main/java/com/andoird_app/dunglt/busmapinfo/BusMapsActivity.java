@@ -63,6 +63,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -99,7 +100,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
     private static final float DEFAULT_ZOOM = 15.0f;
     private static final LatLngBounds LAT_LNG_BOUNDS = new LatLngBounds(
-            new LatLng(-40, -168), new LatLng(71,136)
+            new LatLng(-40, -168), new LatLng(71, 136)
     );
 
     //vars
@@ -146,8 +147,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_bus_maps);
 
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        mGps = (ImageView)findViewById(R.id.ic_gps);
-        mIconSearch = (ImageView)findViewById(R.id.ic_magnify);
+        mGps = (ImageView) findViewById(R.id.ic_gps);
+        mIconSearch = (ImageView) findViewById(R.id.ic_magnify);
 
         //View search place detail variable
         mCurrentAddress = (TextView) findViewById(R.id.current_address_text);
@@ -164,7 +165,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         /* Event clear text button */
-        mClearText = (Button)findViewById(R.id.btn_clear);
+        mClearText = (Button) findViewById(R.id.btn_clear);
         mClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +178,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
          * *************************************
          */
         //Bus List Info
-        layoutBusList = (LinearLayout)findViewById(R.id.bus_list_info);
+        layoutBusList = (LinearLayout) findViewById(R.id.bus_list_info);
         sheetBehavior = BottomSheetBehavior.from(layoutBusList);
         /**
          * bottom sheet state change listener
@@ -190,11 +191,11 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BusMapsActivity.this, "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-                        Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BusMapsActivity.this, "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -224,7 +225,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
-        mBtnBusFloat = (FloatingActionButton)findViewById(R.id.btn_bus_float);
+        mBtnBusFloat = (FloatingActionButton) findViewById(R.id.btn_bus_float);
         mBtnBusFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -238,7 +239,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         });
     }
 
-    private void initSearch(){
+    private void initSearch() {
         // Register a listener that receives callbacks when a suggestion has been selected
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         // Construct a GeoDataClient for the Google Places API for Android.
@@ -279,7 +280,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         hideSoftKeyboard();
     }
 
-    private void geoLocate(){
+    private void geoLocate() {
         Log.d(TAG, "geoLocate: geo locating!");
 
         String searchString = mSearchText.getText().toString();
@@ -288,33 +289,31 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         try {
             list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.d(TAG, "geoLocate: IOexception: "+ e.getMessage());
+        } catch (IOException e) {
+            Log.d(TAG, "geoLocate: IOexception: " + e.getMessage());
         }
 
-        if(list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
             Log.d(TAG, "geoLocate: found address" + address.toString());
 
             mCurrentAddress.setText(address.getLocality().toString());
-            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()),DEFAULT_ZOOM, address.getLocality());
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM, address.getLocality());
         }
     }
 
-    private void showCurrentAddress(LatLng latLng){
-        Log.d(TAG, "showCurrentAddress: Get detail location by lat lng!");
-
+    private void showCurrentAddress(LatLng latLng) {
         String searchString = mSearchText.getText().toString();
         Geocoder geocoder = new Geocoder(BusMapsActivity.this);
         List<Address> addresses = new ArrayList<>();
 
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-        }catch (IOException e){
-            Log.d(TAG, "showCurrentAddress: IOexception: "+ e.getMessage());
+        } catch (IOException e) {
+            Log.d(TAG, "showCurrentAddress: IOexception: " + e.getMessage());
         }
         // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
+        if (addresses == null || addresses.size() == 0) {
             Log.d(TAG, "showCurrentAddress: Get address string is fail");
         } else {
             Address address = addresses.get(0);
@@ -326,26 +325,27 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 addressFragments.add(address.getAddressLine(i));
             }
 
-            mCurrentAddress.setText(TextUtils.join(System.getProperty("line.separator"),
+            mCurrentAddress.setText(TextUtils.join(", ",
                     addressFragments));
         }
     }
-    private void getLocationPermission(){
+
+    private void getLocationPermission() {
         Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
-            }else{
+            } else {
                 ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
@@ -356,19 +356,16 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is already!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
-
         if (mLocationPermissionsGranted) {
-            Log.d(TAG, "Location permission is granted!");
             Toast.makeText(this, "Location permission is granted!!", Toast.LENGTH_SHORT).show();
             initSearch();
             buildGoogleApiClient();
             getDeviceLocation();
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            mMap.setMyLocationEnabled(true);
         }
 
         /* Add event touch or tap on map */
@@ -376,56 +373,56 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
             @Override
             public void onMapClick(LatLng point) {
-
-            showMarkerForClickEvent(point);
+                showMarkerForClickEvent(point);
             }
         });
     }
-    private void showMarkerForClickEvent(LatLng point){
-        if(markerArray.size() >= 2){
-            for(int i = 0; i < markerArray.size(); i++){
+
+    private void showMarkerForClickEvent(LatLng point) {
+        if (markerArray.size() >= 2) {
+            for (int i = 0; i < markerArray.size(); i++) {
                 markerArray.get(i).remove();
             }
             markerArray.clear();
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("First position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-            markerArray.add(0,mMap.addMarker(marker));
+            markerArray.add(0, mMap.addMarker(marker));
 
-        }else if(markerArray.size() == 1){
+        } else if (markerArray.size() == 1) {
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("Second position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            markerArray.add(1,mMap.addMarker(marker));
+            markerArray.add(1, mMap.addMarker(marker));
 
             BusInfoApi busApi = new BusInfoApi();
             requestBusStationListApi(busApi.getUrlRequestBusStationInfo(markerArray));
 
-        }else{
+        } else {
             MarkerOptions marker = new MarkerOptions().position(
                     new LatLng(point.latitude, point.longitude)).title("First position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-            markerArray.add(0,mMap.addMarker(marker));
+            markerArray.add(0, mMap.addMarker(marker));
         }
 
-        for(int i = 0; i < markerArray.size(); i++){
+        for (int i = 0; i < markerArray.size(); i++) {
             markerArray.get(i).showInfoWindow();
         }
 
     }
+
     public void requestBusStationListApi(String uri) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
 
         // prepare the Request
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
-                new Response.Listener<JSONArray>()
-                {
+                new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        mNumberBusStations = (TextView)findViewById(R.id.number_stations);
+                        mNumberBusStations = (TextView) findViewById(R.id.number_stations);
                         busListView = (ListView) findViewById(R.id.bus_station_list_around);
                         //Reset bus Station list
                         resetBusStationList();
-                        if(response.length() > 0) {
+                        if (response.length() > 0) {
 
                             busStationList = new ArrayList<BusStation>();
                             busStationMarkers = new ArrayList<Marker>();
@@ -433,7 +430,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
-                                    if(obj.getString("Status").equals("Đang khai thác")) {
+                                    if (obj.getString("Status").equals("Đang khai thác")) {
                                         BusStation busStation = new BusStation(obj.getInt("StopId"),
                                                 obj.getString("Name"),
                                                 obj.getString("StopType"),
@@ -446,14 +443,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                         busStationMarkers.add(mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(Double.parseDouble(obj.getString("Lat")), Double.parseDouble(obj.getString("Lng"))))
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
-                                    }else{
+                                    } else {
                                         Log.d(TAG, "ko khai thac.");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
                             }
-                            if(busStationList.size() > 0) {
+                            if (busStationList.size() > 0) {
                                 CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around you.";
                                 mNumberBusStations.setText(textNumberBusStation);
 
@@ -475,13 +472,12 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                     }
                                 });
                             }
-                        }else {
+                        } else {
                             Log.d(TAG, "Data bus station return empty");
                         }
                     }
                 },
-                new Response.ErrorListener()
-                {
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(TAG, "Error: " + error.getMessage());
@@ -500,13 +496,14 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         // add it to the RequestQueue
         queue.add(getRequest);
     }
+
     // reset List View for bus station list
-    private void resetBusStationList(){
+    private void resetBusStationList() {
         mNumberBusStations.setText("Can not find out bus station");
 
         //remove bus station marker
-        if(busStationMarkers != null && busStationMarkers.size() >0){
-            for(int i = 0; i < busStationMarkers.size(); i++){
+        if (busStationMarkers != null && busStationMarkers.size() > 0) {
+            for (int i = 0; i < busStationMarkers.size(); i++) {
                 busStationMarkers.get(i).remove();
             }
         }
@@ -515,7 +512,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         busListView.setAdapter(arrayAdapter);
     }
 
-    protected void buildGoogleApiClient(){
+    protected void buildGoogleApiClient() {
         client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -534,7 +531,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             location.addOnFailureListener(this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d(TAG, "get device location fail: "+ e.getMessage());
+                    Log.d(TAG, "get device location fail: " + e.getMessage());
                 }
             });
             location.addOnCompleteListener(this, new OnCompleteListener<Location>() {
@@ -542,7 +539,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 public void onComplete(@NonNull Task<Location> task) {
                     if (task.isSuccessful() && task.getResult() != null) {
                         Location currentLocation = task.getResult();
-                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 10.0f, "Your location");
+                        moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "Your location");
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
                         mCurrentAddress.setText("Unable define your location!");
@@ -558,14 +555,30 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     private void moveCamera(LatLng latlng, float zoom, String title) {
         Log.d(TAG, "Move camera to location: " + latlng.latitude + ", " + latlng.longitude);
 
-        if(currentLocationMarker != null){
+        if (currentLocationMarker != null) {
             currentLocationMarker.remove();
         }
         currentLocationMarker = mMap.addMarker(new MarkerOptions().position(latlng).title(title).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latlng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(zoom));
-        drawCircle(latlng);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, DEFAULT_ZOOM));
+
+
+        // Zoom in, animating the camera.
+        mMap.animateCamera(CameraUpdateFactory.zoomIn());
+
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+
+        // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latlng)      // Sets the center of the map to Mountain View
+                .zoom(17)                   // Sets the zoom
+                .bearing(90)                // Sets the orientation of the camera to east
+                .tilt(30)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        // drawCircle(latlng);
 
 
         /* request get bustation */
@@ -576,8 +589,9 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         //drawBounds(latLngBounds, Color.RED);
         hideSoftKeyboard();
     }
-    private void drawBounds (LatLngBounds bounds, int color) {
-        PolygonOptions polygonOptions =  new PolygonOptions()
+
+    private void drawBounds(LatLngBounds bounds, int color) {
+        PolygonOptions polygonOptions = new PolygonOptions()
                 .add(new LatLng(bounds.northeast.latitude, bounds.northeast.longitude))
                 .add(new LatLng(bounds.southwest.latitude, bounds.northeast.longitude))
                 .add(new LatLng(bounds.southwest.latitude, bounds.southwest.longitude))
@@ -587,7 +601,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         mMap.addMarker(new MarkerOptions().position(new LatLng(bounds.southwest.latitude, bounds.southwest.longitude)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
         mMap.addPolygon(polygonOptions);
     }
-    private Circle drawCircle(LatLng latLng){
+
+    private Circle drawCircle(LatLng latLng) {
 
         CircleOptions options = new CircleOptions()
                 .center(latLng)
@@ -598,6 +613,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
         return mMap.addCircle(options);
     }
+
     public LatLngBounds toBounds(LatLng center, double radiusInMeters) {
         double distanceFromCenterToCorner = radiusInMeters * Math.sqrt(2.0);
         LatLng southwestCorner =
@@ -612,18 +628,31 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         Log.d(TAG, "onRequest PermissionsResult: called.");
         mLocationPermissionsGranted = false;
 
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                             mLocationPermissionsGranted = false;
                             Log.d(TAG, "onRequestPermissionsResult: permission failed");
                             return;
                         }
                     }
-                    Log.d(TAG, "onRequestPermissionsResult: permission granted");
                     mLocationPermissionsGranted = true;
+                    if (mMap == null) {
+                        buildGoogleApiClient();
+                    }
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    mMap.setMyLocationEnabled(true);
                 }
             }
         }
