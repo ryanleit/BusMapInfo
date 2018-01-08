@@ -37,6 +37,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="12dp"
+            android:clickable="true"
             android:src="@drawable/ic_navbar" />
 
         <AutoCompleteTextView
@@ -67,20 +68,34 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="12dp"
+            android:clickable="true"
             android:src="@drawable/ic_magnify" />
     </RelativeLayout>
-
-    <ImageView
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/ic_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_gps"
+        android:layout_below="@id/relLayout1"
+        android:background="@drawable/oval_shape"
+        app:backgroundTint="#fcf9f9"
+        android:layout_alignParentEnd="true"
+        app:layout_anchorGravity="right|end" />
+    <!--<ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@id/relLayout1"
         android:background="@drawable/oval_shape"
+        android:clickable="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:scaleType="centerCrop"
         android:id="@+id/ic_gps"
-        android:src="@drawable/ic_gps"/>
+        android:src="@drawable/ic_gps"/>-->
 
 </RelativeLayout>
     <!-- Adding bottom sheet after main content -->
@@ -94,7 +109,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_bus_float"
         android:background="@drawable/oval_shape"
-        android:backgroundTint="#fcf9f9"
+        app:backgroundTint="#fcf9f9"
         app:layout_anchor="@id/bus_list_info"
         app:layout_anchorGravity="top|right|end" />
 </android.support.design.widget.CoordinatorLayout>

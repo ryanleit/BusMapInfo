@@ -26,7 +26,9 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -114,7 +116,8 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
 
     //widgets
     private AutoCompleteTextView mSearchText;
-    private ImageView mGps;
+    private FloatingActionButton mGps;
+    //private ImageView mGps;
     private ImageView mIconSearch;
     private Button mClearText;
 
@@ -147,13 +150,13 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_bus_maps);
 
         mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
-        mGps = (ImageView) findViewById(R.id.ic_gps);
+        mGps = (FloatingActionButton) findViewById(R.id.ic_gps);
         mIconSearch = (ImageView) findViewById(R.id.ic_magnify);
 
         //View search place detail variable
         mCurrentAddress = (TextView) findViewById(R.id.current_address_text);
         //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getLocationPermission();
         }
 
@@ -259,13 +262,13 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-                /*if(actionId == EditorInfo.IME_ACTION_SEARCH
+                if(actionId == EditorInfo.IME_ACTION_SEARCH
                     || actionId == EditorInfo.IME_ACTION_DONE
                     || event.getAction() == KeyEvent.ACTION_DOWN
                     || event.getAction() == KeyEvent.KEYCODE_ENTER){
                     //execute our method for searching
                     geoLocate();
-                }*/
+                }
                 return false;
             }
         });
@@ -277,6 +280,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 getDeviceLocation();
             }
         });
+
         hideSoftKeyboard();
     }
 
@@ -357,7 +361,6 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         Toast.makeText(this, "Map is already!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
         if (mLocationPermissionsGranted) {
-            Toast.makeText(this, "Location permission is granted!!", Toast.LENGTH_SHORT).show();
             initSearch();
             buildGoogleApiClient();
             getDeviceLocation();
@@ -366,6 +369,10 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 return;
             }
             mMap.setMyLocationEnabled(true);
+        }else{
+            Toast.makeText(this, "Location permission is denied!!", Toast.LENGTH_SHORT).show();
+
+            Log.d(TAG, "Location permission is denied!");
         }
 
         /* Add event touch or tap on map */
