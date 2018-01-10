@@ -62,15 +62,19 @@ public class BusAdapter extends ArrayAdapter<Object> {
                     hours = minutes/60;
                     minutes = minutes % 60;
                 }
-                String duration_text = "Comming in: ";
+                String duration_text = "";
                 if(hours > 0){
                     duration_text += Integer.toString(hours)+"H";
                 }
                 if(minutes > 0){
                     duration_text += Integer.toString(minutes)+"minutes";
                 }
-                tvBusInfor.setText("Come in: "+ duration_text );
-
+                if(duration_text.equals("")){
+                    tvBusInfor.setText("Comming");
+                }else{
+                    tvBusInfor.setText("Come in: "+duration_text);
+                }
+                
                 Double distance = Math.round (bus.getDistance() * 100.0) / 100.0;
                 tvDistance.setText(Double.toString(distance) + "m");
 
