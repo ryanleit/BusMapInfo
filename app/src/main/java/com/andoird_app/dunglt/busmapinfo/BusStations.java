@@ -17,9 +17,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
  * Created by WIN10 on 12/21/2017.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class BusStations extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "BusStationsActivity";
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
     @Override
@@ -31,31 +31,28 @@ public class MainActivity extends AppCompatActivity {
             init();
         }
 
-        Button btnBusStationDetail= (Button) findViewById(R.id.btnBusStationDetail);
-
-        btnBusStationDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, BusStationDetailActivity.class);
-                intent.putExtra("mStopId", 199);
-                intent.putExtra("mCurrentLatlng", new double[]{10.803425,106.703789});
-                intent.putExtra("mBusStationLatlng", new double[]{10.841220, 106.742889});
-                startActivity(intent);
-            }
-        });
     }
 
     private void init(){
+
         Button btnMap = (Button) findViewById(R.id.btnMap);
 
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, BusMapsActivity.class);
+                Intent intent = new Intent(BusStations.this, BusMapsActivity.class);
                 startActivity(intent);
             }
         });
-
+        final android.os.Handler handler = new android.os.Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(BusStations.this, BusMapsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+            }
+        }, 2000);
     }
 
     public boolean isServicesOK()
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         //everything is find and user can make map request
         Log.d(TAG, "isServicesOk: check google services version");
 
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(BusStations.this);
 
         if(available == ConnectionResult.SUCCESS){
             Log.d(TAG, "isServicesOK: Google Play Services is working");
@@ -71,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         }else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             //an error occured but we can reslove it
             Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(BusStations.this, available, ERROR_DIALOG_REQUEST);
 
             dialog.show();
         }else{

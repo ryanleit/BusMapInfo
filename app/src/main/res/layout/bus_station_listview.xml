@@ -51,7 +51,7 @@ android:layout_marginBottom="10dp">
     android:text="..." />
 
 <!-- Rightend Duration -->
-<TextView
+<!--<TextView
     android:id="@+id/duration"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -62,7 +62,7 @@ android:layout_marginBottom="10dp">
     android:layout_marginRight="5dip"
     android:textSize="10dip"
     android:textColor="#0e4eb6"
-    android:textStyle="bold"/>
+    android:textStyle="bold"/>-->
 
 <!-- Rightend Arrow -->
 <ImageView android:layout_width="wrap_content"

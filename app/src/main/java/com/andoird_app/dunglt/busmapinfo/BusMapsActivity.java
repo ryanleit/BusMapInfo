@@ -26,7 +26,6 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -458,7 +457,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                 }
                             }
                             if (busStationList.size() > 0) {
-                                CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around you.";
+                                CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around the position.";
                                 mNumberBusStations.setText(textNumberBusStation);
 
                                 BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.this, busStationList, currentLocationMarker.getPosition());

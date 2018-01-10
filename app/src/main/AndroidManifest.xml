@@ -34,8 +34,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MainActivity"
-            android:label="Main Activity">
+            android:name=".BusStations"
+            android:label="Bus Stations">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

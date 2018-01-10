@@ -55,7 +55,21 @@ public class BusAdapter extends ArrayAdapter<Object> {
                 TextView tvDistance = (TextView) convertView.findViewById(R.id.distance);
                 // Populate the data into the template view using the data object
                 tvName.setText(bus.getBusNumber());
-                tvBusInfor.setText("Duration: " + Integer.toString(bus.getTime())+ ", " + bus.getDateTime());
+
+                int hours = 0;
+                int minutes = bus.getTime() / 60;
+                if(minutes > 60){
+                    hours = minutes/60;
+                    minutes = minutes % 60;
+                }
+                String duration_text = "Comming in: ";
+                if(hours > 0){
+                    duration_text += Integer.toString(hours)+"H";
+                }
+                if(minutes > 0){
+                    duration_text += Integer.toString(minutes)+"minutes";
+                }
+                tvBusInfor.setText("Come in: "+ duration_text );
 
                 Double distance = Math.round (bus.getDistance() * 100.0) / 100.0;
                 tvDistance.setText(Double.toString(distance) + "m");
@@ -66,9 +80,10 @@ public class BusAdapter extends ArrayAdapter<Object> {
 
                 TextView tvBusStationRoute = (TextView)convertView.findViewById(R.id.bus_station_route);
                 TextView tvBusStationDesc = (TextView)convertView.findViewById(R.id.bus_station_desc);
-
+                TextView tvRouteNo = (TextView)convertView.findViewById(R.id.route_no);
                 tvBusStationRoute.setText(busStation.getRN());
-                tvBusStationDesc.setText(busStation.getRNo()+", "+busStation.getSN()+", "+ busStation.getVN());
+                tvBusStationDesc.setText("From: " + busStation.getSN()+" To: "+ busStation.getVN());
+                tvRouteNo.setText("Route no: "+ busStation.getRNo());
                 break;
         }
 
