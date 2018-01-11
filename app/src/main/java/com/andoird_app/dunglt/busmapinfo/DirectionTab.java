@@ -308,9 +308,12 @@ public class DirectionTab extends Fragment implements OnMapReadyCallback {
                 lineOptions.geodesic(true);
 
             }
-
-// Drawing polyline in the Google Map for the i-th route
-            mMap.addPolyline(lineOptions);
+            if(lineOptions != null) {
+                // Drawing polyline in the Google Map for the i-th route
+                mMap.addPolyline(lineOptions);
+            }else{
+                //Toast.makeText(this, "Line Options is null");
+            }
         }
     }
 

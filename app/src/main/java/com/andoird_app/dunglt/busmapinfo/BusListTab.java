@@ -99,34 +99,38 @@ public class BusListTab extends Fragment {
         View view = inflater.inflate(R.layout.fragment_bus_list_tab, container, false);
         busListView = (ListView) view.findViewById(R.id.bus_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeToRefresh);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 BusInfoApi busApi = new BusInfoApi();
                 requestBusListApi(busApi.getUrlRequestBusList(mStopId));
 
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
-        prepareLayoutView();
+
+        if(mBusStationInfo.size() > 0) {
+            ArrayList<Object> data = prepareDataForListView(mBusStationInfo);
+            prepareLayoutView(data);
+        }
+
         // Inflate the layout for this fragment
         return view;
     }
 
-    public void prepareLayoutView(){
-        if(mBusStationInfo.size() > 0) {
-            ArrayList<Object> data = prepareDataForListView(mBusStationInfo);
-            BusAdapter arrayAdapter = new BusAdapter(BusListTab.super.getContext(), data);
-            busListView.setAdapter(arrayAdapter);
+    public void prepareLayoutView(ArrayList<Object> data){
+        BusAdapter arrayAdapter = new BusAdapter(BusListTab.super.getContext(), data);
+        busListView.setAdapter(arrayAdapter);
 
-            busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                }
-            });
-        }
+            }
+        });
     }
 
     public ArrayList<Object> prepareDataForListView(ArrayList<BusStationDetail> busStationDetail){
@@ -197,7 +201,6 @@ public class BusListTab extends Fragment {
     // Request bus list API
     public void requestBusListApi(String uri){
         RequestQueue queue = Volley.newRequestQueue(super.getContext());
-        Log.d(TAG, "Call API :" + uri);
         // prepare the Request
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
                 new Response.Listener<JSONArray>()
@@ -205,19 +208,27 @@ public class BusListTab extends Fragment {
                     @Override
                     public void onResponse(JSONArray response) {
                         Log.d(TAG,"Api response: " + response.toString());
-                        mBusStationInfo = new ArrayList<BusStationDetail>();
+                        ArrayList<Object> data = new ArrayList<Object>();
                         // display response
                         if(response.length() > 0) {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject obj = null;
                                 try {
                                     obj = response.getJSONObject(i);
+                                    BusStationInfo bsi = new BusStationInfo(
+                                            obj.getInt("r"),
+                                            obj.getInt("s"),
+                                            obj.getInt("v"),
+                                            obj.getString("rN"),
+                                            obj.getString("rNo"),
+                                            obj.getString("sN"),
+                                            obj.getString("vN")
+                                    );
+                                    data.add(bsi);
 
-                                    ArrayList<Bus> busList = new ArrayList<Bus>();
-                                    JSONArray data = obj.getJSONArray("arrs");
-                                    for (int j = 0; j < data.length(); j++) {
-                                        JSONObject objBus = data.getJSONObject(j);
-
+                                    JSONArray data_bus = obj.getJSONArray("arrs");
+                                    for (int j = 0; j < data_bus.length(); j++) {
+                                        JSONObject objBus = data_bus.getJSONObject(j);
                                         Bus bus = new Bus(objBus.getDouble("d"),
                                                 objBus.getDouble("s"),
                                                 objBus.getInt("t"),
@@ -225,20 +236,8 @@ public class BusListTab extends Fragment {
                                                 objBus.getString("dts"),
                                                 objBus.getString("v")
                                         );
-                                        busList.add(bus);
+                                        data.add(bus);
                                     }
-
-                                    BusStationDetail busStationDetail = new BusStationDetail(
-                                            obj.getInt("r"),
-                                            obj.getInt("s"),
-                                            obj.getInt("v"),
-                                            obj.getString("rN"),
-                                            obj.getString("rNo"),
-                                            obj.getString("sN"),
-                                            obj.getString("vN"),
-                                            busList
-                                    );
-                                    mBusStationInfo.add(busStationDetail);
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -246,7 +245,7 @@ public class BusListTab extends Fragment {
                             }
                         }
 
-                        prepareLayoutView();
+                        prepareLayoutView(data);
 
                         return;
                     }
