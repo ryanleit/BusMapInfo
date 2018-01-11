@@ -38,8 +38,8 @@ public class Recycler_View_Adapter extends RecyclerView.Adapter<View_Holder> {
     public void onBindViewHolder(View_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        holder.title.setText(list.get(position).getRN());
-        holder.description.setText(list.get(position).getRNo() + ", " +list.get(position).getRN()+ ", " +list.get(position).getSN());
+        holder.title.setText("RN: "+list.get(position).getRNo()+ " "+list.get(position).getRN());
+        holder.description.setText("From: " +list.get(position).getSN()+ " To: " +list.get(position).getVN());
         holder.imageView.setImageResource(R.drawable.ic_bus_float);
 
         //animate(holder);

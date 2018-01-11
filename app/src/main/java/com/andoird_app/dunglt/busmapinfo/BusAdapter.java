@@ -67,14 +67,14 @@ public class BusAdapter extends ArrayAdapter<Object> {
                     duration_text += Integer.toString(hours)+"H";
                 }
                 if(minutes > 0){
-                    duration_text += Integer.toString(minutes)+"minutes";
+                    duration_text += Integer.toString(minutes)+" minutes";
                 }
                 if(duration_text.equals("")){
-                    tvBusInfor.setText("Comming");
+                    tvBusInfor.setText("Xe đang đến.");
                 }else{
-                    tvBusInfor.setText("Come in: "+duration_text);
+                    tvBusInfor.setText("Đến trong: "+duration_text);
                 }
-                
+
                 Double distance = Math.round (bus.getDistance() * 100.0) / 100.0;
                 tvDistance.setText(Double.toString(distance) + "m");
 

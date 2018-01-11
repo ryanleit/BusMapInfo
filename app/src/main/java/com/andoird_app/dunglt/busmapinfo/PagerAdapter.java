@@ -14,16 +14,17 @@ import java.util.ArrayList;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
-    Integer mNoOfTabs;
+    Integer mNoOfTabs, mStopId;
     double[] mCurrentLatlng, mBusStationLatlng;
     ArrayList<BusStationDetail> mBusStationInfo;
 
-    public PagerAdapter(FragmentManager fm, Integer NumberOfTabs, ArrayList<BusStationDetail> busStationInfo, double[] currentLatlng, double[] busStationLatlng) {
+    public PagerAdapter(FragmentManager fm, Integer NumberOfTabs, Integer stopId, ArrayList<BusStationDetail> busStationInfo, double[] currentLatlng, double[] busStationLatlng) {
         super(fm);
         this.mNoOfTabs = NumberOfTabs;
         this.mBusStationInfo = busStationInfo;
         this.mCurrentLatlng = currentLatlng;
         this.mBusStationLatlng = busStationLatlng;
+        this.mStopId = stopId;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
 
         switch (position){
             case 0:
-                BusListTab busListTab = BusListTab.newInstance(mBusStationInfo);
+                BusListTab busListTab = BusListTab.newInstance(mStopId, mBusStationInfo);
                 return busListTab;
 
             case 1:

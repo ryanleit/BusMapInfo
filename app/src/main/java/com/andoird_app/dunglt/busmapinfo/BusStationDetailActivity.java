@@ -91,7 +91,7 @@ public class BusStationDetailActivity extends AppCompatActivity implements BusLi
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
         PagerAdapter pagerAdapter;
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2, mBusStationInfo, mCurrentLatlng, mBustationLatlng);
+        pagerAdapter = new PagerAdapter(getSupportFragmentManager(),2, mStopId,mBusStationInfo, mCurrentLatlng, mBustationLatlng);
 
         viewPager.setAdapter(pagerAdapter);
 
