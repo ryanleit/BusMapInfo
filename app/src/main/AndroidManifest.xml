@@ -46,6 +46,10 @@
             android:name=".BusMapsActivity"
             android:label="@string/title_activity_bus_maps" />
         <activity android:name=".BusStationDetailActivity" />
+        <activity
+            android:name=".FindRouteBusStationActivity"
+            android:label="@string/title_activity_find_route_bus_station"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

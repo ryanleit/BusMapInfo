@@ -18,14 +18,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -88,7 +95,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallback,
+public class BusMapsActivity extends FragmentActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -119,6 +128,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
     //private ImageView mGps;
     private ImageView mIconSearch;
     private Button mClearText;
+    public  DrawerLayout drawer;
 
     //Auto complete
     protected GeoDataClient mGeoDataClient;
@@ -158,6 +168,23 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getLocationPermission();
         }
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ImageView ic_navi = (ImageView)findViewById(R.id.ic_navibar);
+        ic_navi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(Gravity.LEFT);
+            }
+        });
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -239,6 +266,7 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                 }
             }
         });
+
     }
 
     private void initSearch() {
@@ -809,5 +837,63 @@ public class BusMapsActivity extends FragmentActivity implements OnMapReadyCallb
                                               CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
         return Html.fromHtml(res.getString(R.string.place_details, address));
 
+    }
+
+    /* Navigation */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.find_route_bus_station, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
