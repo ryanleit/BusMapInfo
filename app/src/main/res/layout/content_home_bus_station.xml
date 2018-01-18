@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.andoird_app.dunglt.busmapinfo.FindRouteBusStationActivity"
-    tools:showIn="@layout/app_bar_find_route_bus_station">
+    tools:context="com.andoird_app.dunglt.busmapinfo.HomeBusStationActivity"
+    tools:showIn="@layout/app_bar_home_bus_station">
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>

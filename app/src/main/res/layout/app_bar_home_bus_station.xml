@@ -20,7 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_find_route_bus_station" />
+    <include layout="@layout/content_home_bus_station" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

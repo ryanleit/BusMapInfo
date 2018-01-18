@@ -19,19 +19,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
-
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
-
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -66,7 +63,6 @@ import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -94,7 +90,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BusMapsActivity extends Fragment implements
+public class BusMapsActivity_bak extends FragmentActivity implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -152,40 +148,32 @@ public class BusMapsActivity extends Fragment implements
     private final String authKey = "33044a4fc0d44b7ba4441a0f09c60381";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_bus_maps);
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_bus_maps, viewGroup, false);
-        mSearchText = (AutoCompleteTextView) view.findViewById(R.id.input_search);
-        mGps = (FloatingActionButton) view.findViewById(R.id.ic_gps);
-        mIconSearch = (ImageView) view.findViewById(R.id.ic_magnify);
-        /***Number on list view ***/
-        mNumberBusStations = (TextView) view.findViewById(R.id.number_stations);
-        busListView = (ListView) view.findViewById(R.id.bus_station_list_around);
+        setContentView(R.layout.activity_bus_maps);
+
+        mSearchText = (AutoCompleteTextView) findViewById(R.id.input_search);
+        mGps = (FloatingActionButton) findViewById(R.id.ic_gps);
+        mIconSearch = (ImageView) findViewById(R.id.ic_magnify);
 
         //View search place detail variable
-        mCurrentAddress = (TextView) view.findViewById(R.id.current_address_text);
+        mCurrentAddress = (TextView) findViewById(R.id.current_address_text);
         //Initialize Google Play Services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getLocationPermission();
         }
 
-        drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        //SupportMapFragment mapFragment = (SupportMapFragment) (ActivityCompat)this.findFragmentById(R.id.map);
-        MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        if(mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(super.getActivity());
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         /* Event clear text button */
-        mClearText = (Button) view.findViewById(R.id.btn_clear);
+        mClearText = (Button) findViewById(R.id.btn_clear);
         mClearText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,7 +186,7 @@ public class BusMapsActivity extends Fragment implements
          * *************************************
          */
         //Bus List Info
-        layoutBusList = (LinearLayout) view.findViewById(R.id.bus_list_info);
+        layoutBusList = (LinearLayout) findViewById(R.id.bus_list_info);
         sheetBehavior = BottomSheetBehavior.from(layoutBusList);
         /**
          * bottom sheet state change listener
@@ -211,11 +199,11 @@ public class BusMapsActivity extends Fragment implements
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BusMapsActivity_bak.this, "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-                        Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BusMapsActivity_bak.this, "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -238,12 +226,14 @@ public class BusMapsActivity extends Fragment implements
             public void onClick(View v) {
                 if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    //Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
                 } else {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                    //Toast.makeText(BusMapsActivity.this, "Close Sheet" ,Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        mBtnBusFloat = (FloatingActionButton) view.findViewById(R.id.btn_bus_float);
+        mBtnBusFloat = (FloatingActionButton) findViewById(R.id.btn_bus_float);
         mBtnBusFloat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,16 +245,16 @@ public class BusMapsActivity extends Fragment implements
                 }
             }
         });
-        return view;
+
     }
 
     private void initSearch() {
         // Register a listener that receives callbacks when a suggestion has been selected
         mSearchText.setOnItemClickListener(mAutocompleteClickListener);
         // Construct a GeoDataClient for the Google Places API for Android.
-        mGeoDataClient = Places.getGeoDataClient(super.getActivity(), null);
+        mGeoDataClient = Places.getGeoDataClient(this, null);
 
-        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(super.getActivity(), mGeoDataClient, LAT_LNG_BOUNDS, null);
+        mPlaceAutocompleteAdapter = new PlaceAutocompleteAdapter(this, mGeoDataClient, LAT_LNG_BOUNDS, null);
 
         mSearchText.setAdapter(mPlaceAutocompleteAdapter);
 
@@ -301,8 +291,10 @@ public class BusMapsActivity extends Fragment implements
     }
 
     private void geoLocate() {
+        Log.d(TAG, "geoLocate: geo locating!");
+
         String searchString = mSearchText.getText().toString();
-        Geocoder geocoder = new Geocoder(super.getActivity());
+        Geocoder geocoder = new Geocoder(BusMapsActivity_bak.this);
         List<Address> list = new ArrayList<>();
 
         try {
@@ -322,7 +314,7 @@ public class BusMapsActivity extends Fragment implements
 
     private void showCurrentAddress(LatLng latLng) {
         String searchString = mSearchText.getText().toString();
-        Geocoder geocoder = new Geocoder(super.getActivity());
+        Geocoder geocoder = new Geocoder(BusMapsActivity_bak.this);
         List<Address> addresses = new ArrayList<>();
 
         try {
@@ -349,21 +341,22 @@ public class BusMapsActivity extends Fragment implements
     }
 
     private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission: getting location permissions");
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION};
 
-        if (ContextCompat.checkSelfPermission(super.getActivity().getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            if (ContextCompat.checkSelfPermission(super.getActivity().getApplicationContext(),
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                     COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLocationPermissionsGranted = true;
             } else {
-                ActivityCompat.requestPermissions(super.getActivity(),
+                ActivityCompat.requestPermissions(this,
                         permissions,
                         LOCATION_PERMISSION_REQUEST_CODE);
             }
         } else {
-            ActivityCompat.requestPermissions(super.getActivity(),
+            ActivityCompat.requestPermissions(this,
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
@@ -371,19 +364,19 @@ public class BusMapsActivity extends Fragment implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Toast.makeText(super.getActivity(), "Map is already!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Map is already!", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
         if (mLocationPermissionsGranted) {
             initSearch();
             buildGoogleApiClient();
             getDeviceLocation();
-            if (ActivityCompat.checkSelfPermission(super.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(super.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             mMap.setMyLocationEnabled(true);
         }else{
-            Toast.makeText(super.getActivity(), "Location permission is denied!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location permission is denied!!", Toast.LENGTH_SHORT).show();
 
             Log.d(TAG, "Location permission is denied!");
         }
@@ -431,14 +424,15 @@ public class BusMapsActivity extends Fragment implements
 
     public void requestBusStationListApi(String uri) {
 
-        RequestQueue queue = Volley.newRequestQueue(super.getActivity());
+        RequestQueue queue = Volley.newRequestQueue(this);
 
         // prepare the Request
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
+                        mNumberBusStations = (TextView) findViewById(R.id.number_stations);
+                        busListView = (ListView) findViewById(R.id.bus_station_list_around);
                         //Reset bus Station list
                         resetBusStationList();
                         if (response.length() > 0) {
@@ -473,7 +467,7 @@ public class BusMapsActivity extends Fragment implements
                                 CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around the position.";
                                 mNumberBusStations.setText(textNumberBusStation);
 
-                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.super.getActivity(), busStationList, currentLocationMarker.getPosition());
+                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity_bak.this, busStationList, currentLocationMarker.getPosition());
                                 busListView.setAdapter(arrayAdapter);
 
                                 busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -482,7 +476,7 @@ public class BusMapsActivity extends Fragment implements
                                         @SuppressWarnings("unchecked")
                                         BusStation objStation = (BusStation) parent.getItemAtPosition(position);
 
-                                        Intent intent = new Intent(BusMapsActivity.super.getActivity(), BusStationDetailActivity.class);
+                                        Intent intent = new Intent(BusMapsActivity_bak.this, BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", objStation.getStopId());
                                         intent.putExtra("mCurrentLatlng", new double[]{currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude});
                                         intent.putExtra("mBusStationLatlng", new double[]{objStation.getLatLng().latitude, objStation.getLatLng().longitude});
@@ -527,16 +521,16 @@ public class BusMapsActivity extends Fragment implements
             }
         }
         //reset list view
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(super.getActivity(), R.layout.bus_station_listview, R.id.bus_detail, new ArrayList<String>());
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(BusMapsActivity_bak.this, R.layout.bus_station_listview, R.id.bus_detail, new ArrayList<String>());
         busListView.setAdapter(arrayAdapter);
     }
 
     protected void buildGoogleApiClient() {
-        client = new GoogleApiClient.Builder(super.getActivity())
+        client = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
-               // .enableAutoManage(this, this)
+                .enableAutoManage(this, this)
                 .build();
 
         client.connect();
@@ -547,13 +541,13 @@ public class BusMapsActivity extends Fragment implements
         try {
 
             Task location = mFusedLocationProviderClient.getLastLocation();
-            location.addOnFailureListener(super.getActivity(), new OnFailureListener() {
+            location.addOnFailureListener(this, new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Log.d(TAG, "get device location fail: " + e.getMessage());
                 }
             });
-            location.addOnCompleteListener(super.getActivity(), new OnCompleteListener<Location>() {
+            location.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     if (task.isSuccessful() && task.getResult() != null) {
@@ -562,7 +556,7 @@ public class BusMapsActivity extends Fragment implements
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
                         mCurrentAddress.setText("Unable define your location!");
-                        //Toast.makeText(this, "Unable to get current location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BusMapsActivity_bak.this, "Unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -661,7 +655,7 @@ public class BusMapsActivity extends Fragment implements
                     if (mMap == null) {
                         buildGoogleApiClient();
                     }
-                    if (ActivityCompat.checkSelfPermission(super.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(super.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -708,7 +702,7 @@ public class BusMapsActivity extends Fragment implements
         locationRequest.setFastestInterval(1000);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-        if(ContextCompat.checkSelfPermission(super.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             mFusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
     }
@@ -729,7 +723,7 @@ public class BusMapsActivity extends Fragment implements
 
     private void hideSoftKeyboard(){
         //this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        InputMethodManager imm = (InputMethodManager)super.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
     }
 
@@ -769,7 +763,7 @@ public class BusMapsActivity extends Fragment implements
             Task<PlaceBufferResponse> placeResult = mGeoDataClient.getPlaceById(placeId);
             placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallback);
 
-            Toast.makeText(BusMapsActivity.super.getActivity(), "Clicked: " + primaryText,
+            Toast.makeText(getApplicationContext(), "Clicked: " + primaryText,
                     Toast.LENGTH_SHORT).show();
             Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }

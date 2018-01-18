@@ -32,24 +32,32 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-        <activity
+        <!--<activity
             android:name=".BusStations"
             android:label="Bus Stations">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>-->
+        <activity
+            android:name=".HomeBusStationActivity"
+            android:label="@string/title_activity_home_bus_station"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+
+        <!--<activity
             android:name=".BusMapsActivity"
-            android:label="@string/title_activity_bus_maps" />
+            android:label="@string/title_activity_bus_maps" />-->
         <activity android:name=".BusStationDetailActivity" />
-        <activity
+        <!--<activity
             android:name=".FindRouteBusStationActivity"
-            android:label="@string/title_activity_find_route_bus_station"
-            android:theme="@style/AppTheme"></activity>
+            android:label="@string/title_activity_home_bus_station"
+            android:theme="@style/AppTheme" />-->
     </application>
 
 </manifest>

@@ -44,6 +44,15 @@ public class BusStations extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        Button btnHome = (Button) findViewById(R.id.btnHome);
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(BusStations.this, HomeBusStationActivity.class);
+                startActivity(intent);
+            }
+        });
         final android.os.Handler handler = new android.os.Handler();
         handler.postDelayed(new Runnable() {
             @Override
