@@ -28,6 +28,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -159,6 +160,7 @@ public class BusMapsActivity extends Fragment implements
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_bus_maps, viewGroup, false);
+
         mSearchText = (AutoCompleteTextView) view.findViewById(R.id.input_search);
         mGps = (FloatingActionButton) view.findViewById(R.id.ic_gps);
         mIconSearch = (ImageView) view.findViewById(R.id.ic_magnify);
@@ -168,12 +170,11 @@ public class BusMapsActivity extends Fragment implements
 
         //View search place detail variable
         mCurrentAddress = (TextView) view.findViewById(R.id.current_address_text);
+
         //Initialize Google Play Services
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getLocationPermission();
         }
-
-        drawer = (DrawerLayout) view.findViewById(R.id.drawer_layout);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         //SupportMapFragment mapFragment = (SupportMapFragment) (ActivityCompat)this.findFragmentById(R.id.map);
@@ -183,6 +184,15 @@ public class BusMapsActivity extends Fragment implements
         }
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(super.getActivity());
+
+        /* Handle menu navigation view show/hide */
+        ImageView img_navibar = (ImageView)view.findViewById(R.id.ic_navibar);
+        img_navibar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeBusStationActivity)getActivity()).openNavigatioView();
+            }
+        });
 
         /* Event clear text button */
         mClearText = (Button) view.findViewById(R.id.btn_clear);
@@ -197,7 +207,7 @@ public class BusMapsActivity extends Fragment implements
          * BUS LIST INFO BOTTOM SHEET
          * *************************************
          */
-        //Bus List Info
+
         layoutBusList = (LinearLayout) view.findViewById(R.id.bus_list_info);
         sheetBehavior = BottomSheetBehavior.from(layoutBusList);
         /**
@@ -211,11 +221,11 @@ public class BusMapsActivity extends Fragment implements
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-                        Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-                        Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(BusMapsActivity.super.getActivity(), "Close Sheet", Toast.LENGTH_SHORT).show();
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -383,8 +393,6 @@ public class BusMapsActivity extends Fragment implements
             }
             mMap.setMyLocationEnabled(true);
         }else{
-            Toast.makeText(super.getActivity(), "Location permission is denied!!", Toast.LENGTH_SHORT).show();
-
             Log.d(TAG, "Location permission is denied!");
         }
 
@@ -562,7 +570,6 @@ public class BusMapsActivity extends Fragment implements
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
                         mCurrentAddress.setText("Unable define your location!");
-                        //Toast.makeText(this, "Unable to get current location", Toast.LENGTH_SHORT).show();
                     }
                 }
             });

@@ -5,26 +5,80 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".FindRouteBusStationActivity"
 android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/blue_boder">
 
-<TextView
-    android:id="@+id/input_start"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginEnd="20dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="20dp"
-    android:background="@color/colorPrimary"
-    android:textColor="@color/cardview_light_background"
-    android:text="Current Location" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <Button
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ic_find_route_marker"
+                />
+        </RelativeLayout>
 
-<TextView
-        android:id="@+id/input_destination"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/linearLayout"
+                android:background="@drawable/ic_find_route" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical"
+                android:id="@+id/linearLayout">
+
+                <TextView
+                    android:id="@+id/input_start"
+                    android:layout_width="246dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="5dp"
+                    android:background="@drawable/white_boder"
+                    android:hint="Your current Location" />
+
+                <TextView
+                    android:id="@+id/input_destination"
+                    android:layout_width="247dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="5dp"
+                    android:background="@drawable/white_boder"
+                    android:hint="Destination" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
-        android:text="Destination" />
+        android:orientation="vertical">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/find_route_title"
+            android:text="Result for find route:"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
 </LinearLayout>

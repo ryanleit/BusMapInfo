@@ -3,6 +3,7 @@ package com.andoird_app.dunglt.busmapinfo;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
@@ -28,16 +29,20 @@ public class HomeBusStationActivity extends AppCompatActivity
 
     private static final String TAG = "HomeScreen";
     private static final int ERROR_DIALOG_REQUEST = 9001;
-
+    public DrawerLayout drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_bus_station);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         if (isServicesOK()){
             init();
         }
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +52,7 @@ public class HomeBusStationActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -55,6 +60,15 @@ public class HomeBusStationActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        //Get menuItem index 0
+        if (savedInstanceState == null) {
+            MenuItem item =  navigationView.getMenu().getItem(0);
+            item.setChecked(true);
+            onNavigationItemSelected(item);
+
+            AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar_layout);
+            appBarLayout.setExpanded(false, true);
+        }
     }
 
     public void init(){
@@ -155,5 +169,9 @@ public class HomeBusStationActivity extends AppCompatActivity
         }
 
         return false;
+    }
+
+    public void openNavigatioView(){
+        drawer.openDrawer(GravityCompat.START);
     }
 }
