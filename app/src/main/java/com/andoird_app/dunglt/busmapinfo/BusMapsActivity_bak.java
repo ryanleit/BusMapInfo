@@ -449,7 +449,8 @@ public class BusMapsActivity_bak extends FragmentActivity implements
                                                 obj.getString("StopType"),
                                                 obj.getString("AddressNo"),
                                                 obj.getString("Street"),
-                                                new LatLng(obj.getDouble("Lat"), obj.getDouble("Lng"))
+                                                new LatLng(obj.getDouble("Lat"), obj.getDouble("Lng")),
+                                                obj.getString("Routes")
                                         );
                                         busStationList.add(busStation);
 

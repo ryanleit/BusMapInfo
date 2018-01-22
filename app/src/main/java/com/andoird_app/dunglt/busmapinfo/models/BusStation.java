@@ -11,17 +11,18 @@ import java.util.Locale;
 public class BusStation {
 
     Integer stopId;
-    String code, name, stopType, zone, ward, addressNo, street, supportDisability, status, search, route;
+    String code, name, stopType, zone, ward, addressNo, street, supportDisability, status, search, routes;
 
     LatLng latLng;
 
-    public BusStation(Integer stopId, String name, String stopType, String addressNo, String street, LatLng latLng) {
+    public BusStation(Integer stopId, String name, String stopType, String addressNo, String street, LatLng latLng, String routes) {
         this.stopId = stopId;
         this.name = name;
         this.stopType = stopType;
         this.addressNo = addressNo;
         this.street = street;
         this.latLng = latLng;
+        this.routes = routes;
 
     }
 
@@ -36,6 +37,7 @@ public class BusStation {
     public String getStopType() {
         return stopType;
     }
+
     public String getAddressNo() {
         return addressNo;
     }
@@ -48,4 +50,7 @@ public class BusStation {
         return latLng;
     }
 
+    public String getRoutes(){
+        return routes;
+    }
 }
