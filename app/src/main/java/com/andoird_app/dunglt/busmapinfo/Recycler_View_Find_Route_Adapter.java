@@ -39,8 +39,8 @@ public class Recycler_View_Find_Route_Adapter extends RecyclerView.Adapter<View_
     public void onBindViewHolder(View_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        holder.title.setText(""+list.get(position).getBusStationStart()+ " To "+list.get(position).getBusStationEnd());
-        holder.description.setText("RouteNo" +list.get(position).getRouteNumber()+ " On" +list.get(position).getBusStationStart());
+        holder.title.setText("Start: "+list.get(position).getBusStationStart()+ " To: "+list.get(position).getBusStationEnd());
+        holder.description.setText("Go on these routes: " +list.get(position).getRouteNumber());
         holder.imageView.setImageResource(R.drawable.ic_bus_float);
 
         //animate(holder);

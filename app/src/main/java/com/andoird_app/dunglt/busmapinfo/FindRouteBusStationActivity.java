@@ -109,17 +109,24 @@ public class FindRouteBusStationActivity extends Fragment {
                     routeSearchGuides =  new ArrayList<RouteSearchGuide>();
 
                     for (int i=0; i < busStationListStart.size(); i++){
+                        RouteSearchGuide rsg = null;
                         String[] routes = busStationListStart.get(i).getRoutes().split(",");
-                        for(int r=0; r < routes.length; r++) {
-                            for (int j = 0; j < busStationListEnd.size(); j++) {
-                                String s = ", "+busStationListStart.get(i).getRoutes()+",";
+                        for (int j = 0; j < busStationListEnd.size(); j++) {
+                            String routesNo = "";
+                            String s = ", "+busStationListStart.get(i).getRoutes()+",";
+                            for(int r=0; r < routes.length; r++) {
                                 String subS = ", "+routes[r].trim()+",";
                                 if (s.indexOf(subS) != -1) {
-                                    RouteSearchGuide rsg = new RouteSearchGuide(routes[r].trim(),busStationListStart.get(i).getName(), busStationListEnd.get(j).getName());
-                                    routeSearchGuides.add(rsg);
+                                    routesNo += routes[r].trim()+",";
                                 }
                             }
+
+                            if(!routesNo.equals("")){
+                                rsg = new RouteSearchGuide(routesNo,busStationListStart.get(i).getName(), busStationListEnd.get(j).getName());
+                                routeSearchGuides.add(rsg);
+                            }
                         }
+
                     }
                     Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationActivity.super.getActivity());
                     recyclerFindRouteView.setAdapter(adapter);
@@ -138,6 +145,33 @@ public class FindRouteBusStationActivity extends Fragment {
             }
         });
         return view;
+    }
+    private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') {
+            dist = dist * 1.609344;
+        } else if (unit == 'N') {
+            dist = dist * 0.8684;
+        }
+        return (dist);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts decimal degrees to radians             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double deg2rad(double deg) {
+        return (deg * Math.PI / 180.0);
+    }
+
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    /*::  This function converts radians to decimal degrees             :*/
+    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+    private double rad2deg(double rad) {
+        return (rad * 180.0 / Math.PI);
     }
 
     private void initSearch() {
