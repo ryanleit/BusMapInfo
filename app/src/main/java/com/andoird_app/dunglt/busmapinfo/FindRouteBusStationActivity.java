@@ -97,6 +97,12 @@ public class FindRouteBusStationActivity extends Fragment {
         mSearchStart = (AutoCompleteTextView) view.findViewById(R.id.input_start);
         mSearchEnd = (AutoCompleteTextView) view.findViewById(R.id.input_destination);
 
+       /* request get bustation */
+        BusInfoApi busApi = new BusInfoApi();
+        position_a = ((HomeBusStationActivity)getActivity()).getCurrentLocation();
+        LatLngBounds latLngBounds = toBounds(position_a, 500.0);
+        requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"start");
+
         initSearch();
 
         recyclerFindRouteView = (RecyclerView) view.findViewById(R.id.find_route_info_list);
@@ -122,7 +128,13 @@ public class FindRouteBusStationActivity extends Fragment {
                             }
 
                             if(!routesNo.equals("")){
-                                rsg = new RouteSearchGuide(routesNo,busStationListStart.get(i).getName(), busStationListEnd.get(j).getName());
+                                Double distance1 = distance(position_a.latitude, position_a.longitude,busStationListStart.get(i).getLatLng().latitude,busStationListStart.get(i).getLatLng().longitude,'K');
+                                Double distance2 = distance(busStationListStart.get(i).getLatLng().latitude,busStationListStart.get(i).getLatLng().longitude,busStationListEnd.get(j).getLatLng().latitude,busStationListEnd.get(j).getLatLng().longitude,'K');
+                                Double distance3 = distance(busStationListEnd.get(j).getLatLng().latitude,busStationListEnd.get(j).getLatLng().longitude,position_b.latitude, position_b.longitude,'K');
+
+                                Double distance = distance1 + distance2 + distance3;
+                                rsg = new RouteSearchGuide(routesNo,busStationListStart.get(i).getName(), busStationListEnd.get(j).getName(), distance);
+
                                 routeSearchGuides.add(rsg);
                             }
                         }
@@ -275,7 +287,10 @@ public class FindRouteBusStationActivity extends Fragment {
 
                  /* request get bustation */
                 BusInfoApi busApi = new BusInfoApi();
-                LatLngBounds latLngBounds = toBounds(new LatLng(place.getLatLng().latitude, place.getLatLng().longitude), 500.0);
+
+                position_a = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+
+                LatLngBounds latLngBounds = toBounds(position_a, 500.0);
                 requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"start");
 
                 Log.i(TAG, "Place details start: Lat: " + Double.toString(place.getLatLng().latitude) + ", Lng: "+ Double.toString(place.getLatLng().longitude));
@@ -341,7 +356,10 @@ public class FindRouteBusStationActivity extends Fragment {
 
                  /* request get bustation */
                 BusInfoApi busApi = new BusInfoApi();
-                LatLngBounds latLngBounds = toBounds(new LatLng(place.getLatLng().latitude, place.getLatLng().longitude), 500.0);
+
+                position_b = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
+
+                LatLngBounds latLngBounds = toBounds(position_b, 500.0);
                 requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"destination");
 
                 Log.i(TAG, "Place details of destination: Lat: " + Double.toString(place.getLatLng().latitude) + ", Lng: "+ Double.toString(place.getLatLng().longitude));

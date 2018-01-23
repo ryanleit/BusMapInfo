@@ -40,8 +40,8 @@ android:orientation="vertical">
                     android:layout_margin="5dp">
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:background="@drawable/ic_find_route_start" />
 
                     <AutoCompleteTextView
@@ -50,7 +50,7 @@ android:orientation="vertical">
                         android:layout_height="30dp"
                         android:background="@drawable/white_boder"
                         android:hint="Enter Start Location"
-                        android:text="Your current location"
+                        android:text="Current location"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:padding="5dp" />

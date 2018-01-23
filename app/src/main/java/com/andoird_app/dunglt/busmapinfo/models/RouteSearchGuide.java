@@ -1,20 +1,19 @@
 package com.andoird_app.dunglt.busmapinfo.models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 /**
  * Created by dunglt on 12/29/2017.
  */
 
 public class RouteSearchGuide {
 
-    Integer distance;
+    Double distance;
     String routeNumber,busStationStart, busStationEnd;
 
-    public RouteSearchGuide(String routeNumber, String busStationStart, String busStationEnd) {
+    public RouteSearchGuide(String routeNumber, String busStationStart, String busStationEnd, Double distance) {
         this.routeNumber = routeNumber;
         this.busStationStart = busStationStart;
         this.busStationEnd = busStationEnd;
+        this.distance = distance;
     }
 
     public String getRouteNumber() {
@@ -27,5 +26,9 @@ public class RouteSearchGuide {
 
     public String getBusStationStart() {
         return busStationStart;
+    }
+
+    public Double getDistance(){
+        return Math.round(distance*100)/100.0;
     }
 }

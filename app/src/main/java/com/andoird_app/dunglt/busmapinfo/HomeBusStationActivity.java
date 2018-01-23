@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.model.LatLng;
 
 public class HomeBusStationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +31,9 @@ public class HomeBusStationActivity extends AppCompatActivity
     private static final String TAG = "HomeScreen";
     private static final int ERROR_DIALOG_REQUEST = 9001;
     public DrawerLayout drawer;
+
+    public LatLng currentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,5 +177,13 @@ public class HomeBusStationActivity extends AppCompatActivity
 
     public void openNavigatioView(){
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    public void setCurrentLocation(LatLng location){
+        currentLocation = location;
+    }
+
+    public  LatLng getCurrentLocation(){
+        return currentLocation;
     }
 }

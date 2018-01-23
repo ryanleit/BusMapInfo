@@ -570,6 +570,9 @@ public class BusMapsActivity extends Fragment implements
                     if (task.isSuccessful() && task.getResult() != null) {
                         Location currentLocation = task.getResult();
                         moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM, "Your location");
+
+                        ((HomeBusStationActivity)getActivity()).setCurrentLocation(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
                         showCurrentAddress(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     } else {
                         mCurrentAddress.setText("Unable define your location!");
