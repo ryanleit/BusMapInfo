@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStation;
+import com.andoird_app.dunglt.busmapinfo.models.RouteSearchGuide;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -47,7 +51,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,6 +65,7 @@ public class FindRouteBusStationActivity extends Fragment {
     ArrayList<BusStation> busStationList;
     ArrayList<BusStation> busStationListStart;
     ArrayList<BusStation> busStationListEnd;
+    ArrayList<RouteSearchGuide> routeSearchGuides;
 
     private AutoCompleteTextView mSearchStart;
     private AutoCompleteTextView mSearchEnd;
@@ -72,7 +79,7 @@ public class FindRouteBusStationActivity extends Fragment {
     protected GeoDataClient mGeoDataClientDestination;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
     private PlaceAutocompleteAdapter mPlaceAutocompleteAdapterDestination;
-
+    private RecyclerView recyclerFindRouteView;
     private LatLng position_a;
     private LatLng position_b;
 
@@ -92,12 +99,37 @@ public class FindRouteBusStationActivity extends Fragment {
 
         initSearch();
 
+        recyclerFindRouteView = (RecyclerView) view.findViewById(R.id.find_route_info_list);
         mBtnFindRoute = (Button) view.findViewById(R.id.btnFindRoute);
         mBtnFindRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if((busStationListStart != null && busStationListStart.size() > 0)
                         && (busStationListEnd != null && busStationListEnd.size() > 0)){
+                    routeSearchGuides =  new ArrayList<RouteSearchGuide>();
+
+                    for (int i=0; i < busStationListStart.size(); i++){
+                        String[] routes = busStationListStart.get(i).getRoutes().split(",");
+                        for(int r=0; r < routes.length; r++) {
+                            for (int j = 0; j < busStationListEnd.size(); j++) {
+                                String s = ", "+busStationListStart.get(i).getRoutes()+",";
+                                String subS = ", "+routes[r].trim()+",";
+                                if (s.indexOf(subS) != -1) {
+                                    RouteSearchGuide rsg = new RouteSearchGuide(routes[r].trim(),busStationListStart.get(i).getName(), busStationListEnd.get(j).getName());
+                                    routeSearchGuides.add(rsg);
+                                }
+                            }
+                        }
+                    }
+                    Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationActivity.super.getActivity());
+                    recyclerFindRouteView.setAdapter(adapter);
+                    recyclerFindRouteView.setLayoutManager(new LinearLayoutManager(FindRouteBusStationActivity.super.getActivity()));
+
+                    //******
+                    RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+                    itemAnimator.setAddDuration(1000);
+                    itemAnimator.setRemoveDuration(1000);
+                    recyclerFindRouteView.setItemAnimator(itemAnimator);
 
                     Log.d(TAG, "We have busStation list start and destination");
                 }else{
@@ -328,7 +360,7 @@ public class FindRouteBusStationActivity extends Fragment {
                                     busStationListEnd = busStationList;
                                 }
 
-                                busStationList.clear();
+                                //busStationList.clear();
                             }
                         } else {
                             Log.d(TAG, "Data bus station return empty");

@@ -470,6 +470,8 @@ public class BusMapsActivity extends Fragment implements
 
                                         busStationMarkers.add(mMap.addMarker(new MarkerOptions()
                                                 .position(new LatLng(Double.parseDouble(obj.getString("Lat")), Double.parseDouble(obj.getString("Lng"))))
+                                                .title(busStation.getName())
+                                                .snippet("Routes: " + busStation.getRoutes())
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
                                     } else {
                                         Log.d(TAG, "ko khai thac.");
