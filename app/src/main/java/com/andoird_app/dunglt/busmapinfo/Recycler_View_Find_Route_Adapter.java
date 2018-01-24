@@ -16,7 +16,7 @@ import java.util.List;
  * Created by WIN10 on 1/4/2018.
  */
 
-public class Recycler_View_Find_Route_Adapter extends RecyclerView.Adapter<View_Holder> {
+public class Recycler_View_Find_Route_Adapter extends RecyclerView.Adapter<View_Find_Route_Holder> {
 
     List<RouteSearchGuide> list = Collections.emptyList();
     Context context;
@@ -27,19 +27,20 @@ public class Recycler_View_Find_Route_Adapter extends RecyclerView.Adapter<View_
     }
 
     @Override
-    public View_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public View_Find_Route_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
         //Inflate the layout, initialize the View Holder
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_layout, parent, false);
-        View_Holder holder = new View_Holder(v);
+        View_Find_Route_Holder holder = new View_Find_Route_Holder(v);
         return holder;
 
     }
 
     @Override
-    public void onBindViewHolder(View_Holder holder, int position) {
+    public void onBindViewHolder(View_Find_Route_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        holder.title.setText("Station: "+list.get(position).getBusStationStart()+ " To: "+list.get(position).getBusStationEnd()+ ", Total distance: "+ Double.toString(list.get(position).getDistance())+ " km");
+        holder.title.setText("Station Start: "+list.get(position).getBusStationStart()+ " To: "+list.get(position).getBusStationEnd());
+        holder.distance.setText("Total distance: "+ Double.toString(list.get(position).getDistance())+ " km");
         holder.description.setText("Go on these routes: " +list.get(position).getRouteNumber());
         holder.imageView.setImageResource(R.drawable.ic_bus_float);
 

@@ -140,16 +140,18 @@ public class FindRouteBusStationActivity extends Fragment {
                         }
 
                     }
-                    Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationActivity.super.getActivity());
-                    recyclerFindRouteView.setAdapter(adapter);
-                    recyclerFindRouteView.setLayoutManager(new LinearLayoutManager(FindRouteBusStationActivity.super.getActivity()));
 
-                    //******
-                    RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-                    itemAnimator.setAddDuration(1000);
-                    itemAnimator.setRemoveDuration(1000);
-                    recyclerFindRouteView.setItemAnimator(itemAnimator);
+                    if(routeSearchGuides.size() > 0) {
+                        Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationActivity.super.getActivity());
+                        recyclerFindRouteView.setAdapter(adapter);
+                        recyclerFindRouteView.setLayoutManager(new LinearLayoutManager(FindRouteBusStationActivity.super.getActivity()));
 
+                        //******
+                        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+                        itemAnimator.setAddDuration(1000);
+                        itemAnimator.setRemoveDuration(1000);
+                        recyclerFindRouteView.setItemAnimator(itemAnimator);
+                    }
                     Log.d(TAG, "We have busStation list start and destination");
                 }else{
                     Log.d(TAG, "busStationListStart and busStationListEnd empty!");

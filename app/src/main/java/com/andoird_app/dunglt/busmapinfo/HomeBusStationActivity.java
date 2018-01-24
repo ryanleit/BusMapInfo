@@ -2,6 +2,7 @@ package com.andoird_app.dunglt.busmapinfo;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -34,15 +35,17 @@ public class HomeBusStationActivity extends AppCompatActivity
 
     public LatLng currentLocation;
 
+    ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home_bus_station);
 
+        setContentView(R.layout.activity_home_bus_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (isServicesOK()){
+        if (isServicesOK()) {
             init();
         }
 
@@ -73,6 +76,18 @@ public class HomeBusStationActivity extends AppCompatActivity
             AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar_layout);
             appBarLayout.setExpanded(false, true);
         }
+    }
+
+    public void showDialog() {
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading...");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
+    }
+
+    public void hideDialog() {
+        dialog.hide();
     }
 
     public void init(){

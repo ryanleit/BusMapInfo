@@ -19,6 +19,7 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/white_boder"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="16dp" />
@@ -32,13 +33,22 @@
             android:text="Title"
             android:textStyle="bold"
             android:textColor="#224ce4"
-            android:textSize="15sp" />
-
+            android:textSize="10sp" />
+        <TextView
+            android:id="@+id/distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_toRightOf="@+id/imageView"
+            android:text="Distance"
+            android:textStyle="bold"
+            android:textColor="#f46b61"
+            android:textSize="10sp" />
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
+            android:layout_below="@+id/distance"
             android:layout_toRightOf="@+id/imageView"
             android:text="Description" />
 

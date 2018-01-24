@@ -3,6 +3,7 @@ package com.andoird_app.dunglt.busmapinfo;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -265,6 +266,10 @@ public class BusMapsActivity extends Fragment implements
                 }
             }
         });
+
+        /* HIDE DIALOG LOADING*/
+       // ((HomeBusStationActivity)getActivity()).hideDialog();
+
         return view;
     }
 
