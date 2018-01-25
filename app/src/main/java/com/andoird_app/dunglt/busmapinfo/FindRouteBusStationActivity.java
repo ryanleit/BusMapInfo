@@ -100,7 +100,7 @@ public class FindRouteBusStationActivity extends Fragment {
        /* request get bustation */
         BusInfoApi busApi = new BusInfoApi();
         position_a = ((HomeBusStationActivity)getActivity()).getCurrentLocation();
-        LatLngBounds latLngBounds = toBounds(position_a, 500.0);
+        LatLngBounds latLngBounds = toBounds(position_a, 700.0);
         requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"start");
 
         initSearch();
@@ -292,7 +292,7 @@ public class FindRouteBusStationActivity extends Fragment {
 
                 position_a = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
 
-                LatLngBounds latLngBounds = toBounds(position_a, 500.0);
+                LatLngBounds latLngBounds = toBounds(position_a, 700.0);
                 requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"start");
 
                 Log.i(TAG, "Place details start: Lat: " + Double.toString(place.getLatLng().latitude) + ", Lng: "+ Double.toString(place.getLatLng().longitude));
@@ -361,7 +361,7 @@ public class FindRouteBusStationActivity extends Fragment {
 
                 position_b = new LatLng(place.getLatLng().latitude, place.getLatLng().longitude);
 
-                LatLngBounds latLngBounds = toBounds(position_b, 500.0);
+                LatLngBounds latLngBounds = toBounds(position_b, 700.0);
                 requestBusStationListApi(busApi.getUrlRequestBusStationInfoByBounds(latLngBounds),"destination");
 
                 Log.i(TAG, "Place details of destination: Lat: " + Double.toString(place.getLatLng().latitude) + ", Lng: "+ Double.toString(place.getLatLng().longitude));

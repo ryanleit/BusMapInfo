@@ -33,7 +33,7 @@
             android:text="Title"
             android:textStyle="bold"
             android:textColor="#224ce4"
-            android:textSize="10sp" />
+            android:textSize="12sp" />
         <TextView
             android:id="@+id/distance"
             android:layout_width="wrap_content"
@@ -50,6 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/distance"
             android:layout_toRightOf="@+id/imageView"
+            android:textColor="#282727"
+            android:textStyle="italic"
             android:text="Description" />
 
     </RelativeLayout>

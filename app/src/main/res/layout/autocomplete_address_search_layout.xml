@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:background="@drawable/bg_listview"
+android:orientation="horizontal"
+android:padding="5dip"
+android:layout_marginBottom="10dp">
+
+<!--  ListRow Left sied Thumbnail image -->
+<LinearLayout android:id="@+id/bus_thumbnail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="3dip"
+    android:layout_alignParentLeft="true"
+    android:background="@drawable/oval_shape"
+    android:layout_marginRight="5dip">
+
+    <ImageView
+        android:id="@+id/bus_image"
+        android:layout_width="30dip"
+        android:layout_height="30dip"
+        android:src="@drawable/ic_place_auto"/>
+
+</LinearLayout>
+
+<!-- Title Of Song-->
+<TextView
+    android:id="@+id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignTop="@+id/bus_thumbnail"
+    android:layout_toRightOf="@+id/bus_thumbnail"
+    android:layout_marginTop="6dip"
+    android:textAppearance="?android:attr/textAppearanceListItem"
+    android:textAlignment="viewStart"
+    android:textColor="#040404"
+    android:typeface="sans"
+    android:textSize="15dip"
+    android:textStyle="bold"/>
+
+<!-- Artist Name -->
+<TextView
+    android:id="@+id/text2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/text1"
+    android:layout_alignStart="@android:id/text1"
+    android:textAppearance="?android:attr/textAppearanceSmall"
+    android:textAlignment="viewStart"
+    android:layout_toRightOf="@+id/bus_thumbnail" />
+
+</RelativeLayout>

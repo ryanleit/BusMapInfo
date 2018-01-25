@@ -79,7 +79,8 @@ public class PlaceAutocompleteAdapter
      */
     public PlaceAutocompleteAdapter(Context context, GeoDataClient geoDataClient,
                                     LatLngBounds bounds, AutocompleteFilter filter) {
-        super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
+      //  super(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1);
+        super(context, R.layout.autocomplete_address_search_layout, R.id.text1);
         mGeoDataClient = geoDataClient;
         mBounds = bounds;
         mPlaceFilter = filter;
@@ -118,8 +119,8 @@ public class PlaceAutocompleteAdapter
 
         AutocompletePrediction item = getItem(position);
 
-        TextView textView1 = (TextView) row.findViewById(android.R.id.text1);
-        TextView textView2 = (TextView) row.findViewById(android.R.id.text2);
+        TextView textView1 = (TextView) row.findViewById(R.id.text1);
+        TextView textView2 = (TextView) row.findViewById(R.id.text2);
         textView1.setText(item.getPrimaryText(STYLE_BOLD));
         textView2.setText(item.getSecondaryText(STYLE_BOLD));
 
