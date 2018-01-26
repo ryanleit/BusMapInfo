@@ -32,7 +32,7 @@ public class HomeBusStationActivity extends AppCompatActivity
     private static final String TAG = "HomeScreen";
     private static final int ERROR_DIALOG_REQUEST = 9001;
     public DrawerLayout drawer;
-
+    public NavigationView navigationView;
     public LatLng currentLocation;
 
     ProgressDialog dialog;
@@ -43,38 +43,45 @@ public class HomeBusStationActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_home_bus_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setLogo(R.drawable.ic_bus_station_title);
         setSupportActionBar(toolbar);
 
         if (isServicesOK()) {
-            init();
-        }
+           /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
+            });*/
 
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+            //Get menuItem index 0
+            if (savedInstanceState == null) {
+                final android.os.Handler handler = new android.os.Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getSupportActionBar().hide();
+                        MenuItem item = navigationView.getMenu().getItem(0);
+                        item.setChecked(true);
+                        onNavigationItemSelected(item);
+
+                        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
+                        appBarLayout.setExpanded(false, true);
+
+                        overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+                    }
+                }, 2000);
             }
-        });
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        //Get menuItem index 0
-        if (savedInstanceState == null) {
-            MenuItem item =  navigationView.getMenu().getItem(0);
-            item.setChecked(true);
-            onNavigationItemSelected(item);
-
-            AppBarLayout appBarLayout = (AppBarLayout)findViewById(R.id.appbar_layout);
-            appBarLayout.setExpanded(false, true);
         }
     }
 
@@ -141,9 +148,10 @@ public class HomeBusStationActivity extends AppCompatActivity
         int id = item.getItemId();
 
         Fragment fragment = null;
-
+        getSupportActionBar().show();
         if (id == R.id.nav_camera) {
             fragment = new BusMapsActivity();
+            getSupportActionBar().hide();
         } else if (id == R.id.nav_gallery) {
             fragment = new FindRouteBusStationActivity();
         } else if (id == R.id.nav_slideshow) {

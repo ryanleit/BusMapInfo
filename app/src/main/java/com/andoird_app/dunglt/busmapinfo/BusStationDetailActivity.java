@@ -66,8 +66,6 @@ public class BusStationDetailActivity extends AppCompatActivity implements
         mCurrentLatlng = i.getDoubleArrayExtra("mCurrentLatlng");
         mBustationLatlng = i.getDoubleArrayExtra("mBusStationLatlng");
 
-        //Toast.makeText(BusStationDetailActivity.this, "Item "+ Integer.toString(mStopId)+ " is clicked!", Toast.LENGTH_SHORT).show();
-
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Bus Station Detail");
        // toolbar.setNavigationIcon(getDrawable(R.drawable.ic_navbar));
@@ -107,7 +105,6 @@ public class BusStationDetailActivity extends AppCompatActivity implements
     // Request bus list API
     public void requestBusListApi(String uri){
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(TAG, "Call API :" + uri);
         // prepare the Request
         JsonArrayRequest getRequest = new JsonArrayRequest(Request.Method.GET, uri, null,
                 new Response.Listener<JSONArray>()
