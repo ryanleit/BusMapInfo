@@ -702,6 +702,9 @@ public class BusMapsActivity extends Fragment implements
 
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+        ((HomeBusStationActivity)getActivity()).setCurrentLocation(latLng);
+
         moveCamera(latLng, DEFAULT_ZOOM, "Current position");
 
         if(client != null)

@@ -43,7 +43,7 @@ public class HomeBusStationActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_home_bus_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setLogo(R.drawable.ic_bus_station_title);
+       // toolbar.setLogo(R.drawable.ic_bus_station_title);
         setSupportActionBar(toolbar);
 
         if (isServicesOK()) {
@@ -79,10 +79,17 @@ public class HomeBusStationActivity extends AppCompatActivity
                         appBarLayout.setExpanded(false, true);
 
                         overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+                        hideDialog();
                     }
                 }, 2000);
             }
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showDialog();
     }
 
     public void showDialog() {

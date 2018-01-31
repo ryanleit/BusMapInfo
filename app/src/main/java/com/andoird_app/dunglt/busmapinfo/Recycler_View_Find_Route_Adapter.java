@@ -40,7 +40,7 @@ public class Recycler_View_Find_Route_Adapter extends RecyclerView.Adapter<View_
     public void onBindViewHolder(View_Find_Route_Holder holder, int position) {
 
         //Use the provided View Holder on the onCreateViewHolder method to populate the current row on the RecyclerView
-        holder.title.setText("Station start: "+list.get(position).getBusStationStart()+ "- Destination: "+list.get(position).getBusStationEnd());
+        holder.title.setText("* "+list.get(position).getBusStationStart()+ " => "+list.get(position).getBusStationEnd());
         holder.distance.setText("Total distance: "+ Double.toString(list.get(position).getDistance())+ " km");
         holder.description.setText("Go on these routes: " +list.get(position).getRouteNumber());
         holder.imageView.setImageResource(R.drawable.ic_bus_float);

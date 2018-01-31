@@ -133,6 +133,7 @@ public class FindRouteBusStationActivity extends Fragment {
                                 Double distance3 = distance(busStationListEnd.get(j).getLatLng().latitude,busStationListEnd.get(j).getLatLng().longitude,position_b.latitude, position_b.longitude,'K');
 
                                 Double distance = distance1 + distance2 + distance3;
+                                routesNo = routesNo.substring(0, routesNo.length() - 1);
                                 rsg = new RouteSearchGuide(routesNo,busStationListStart.get(i).getName(), busStationListEnd.get(j).getName(), distance);
 
                                 routeSearchGuides.add(rsg);

@@ -9,7 +9,7 @@ android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:background="@drawable/blue_boder">
+        android:background="@drawable/blue_boder_no_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -17,11 +17,10 @@ android:orientation="vertical">
 
             <Button
                 android:id="@+id/btnFindRoute"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_toEndOf="@+id/find_route_form"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="40dp"
                 android:background="@drawable/ic_find_route" />
 
             <LinearLayout
@@ -29,7 +28,7 @@ android:orientation="vertical">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="15dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -40,17 +39,19 @@ android:orientation="vertical">
                     android:layout_margin="5dp">
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="2dp"
                         android:background="@drawable/ic_find_route_start" />
 
                     <AutoCompleteTextView
                         android:id="@+id/input_start"
-                        android:layout_width="250dp"
+                        android:layout_width="300dp"
                         android:layout_height="30dp"
                         android:background="@drawable/white_boder"
                         android:hint="Enter Start Location"
                         android:text="Current location"
+                        android:textStyle="italic"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:padding="5dp" />
@@ -65,15 +66,17 @@ android:orientation="vertical">
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="2dp"
                         android:background="@drawable/ic_find_route_marker" />
 
                     <AutoCompleteTextView
                         android:id="@+id/input_destination"
-                        android:layout_width="250dp"
+                        android:layout_width="300dp"
                         android:layout_height="30dp"
                         android:background="@drawable/white_boder"
+                        android:textStyle="italic"
                         android:singleLine="true"
                         android:ellipsize="end"
                         android:hint="Destination"
