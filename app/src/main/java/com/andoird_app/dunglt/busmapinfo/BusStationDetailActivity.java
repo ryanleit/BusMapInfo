@@ -68,17 +68,10 @@ public class BusStationDetailActivity extends AppCompatActivity implements
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Bus Station Detail");
-       // toolbar.setNavigationIcon(getDrawable(R.drawable.ic_navbar));
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BusStationDetailActivity.this, "Icon navigation click", Toast.LENGTH_SHORT).show();
-            }
-        });
 
-        setSupportActionBar(toolbar);
+        /*setSupportActionBar(toolbar);
         final ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayHomeAsUpEnabled(true);*/
 
         tabLayout =  (TabLayout) findViewById(R.id.tabLayout);
         //Adding the tabs using addTab() method

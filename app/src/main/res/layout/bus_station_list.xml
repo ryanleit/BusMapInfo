@@ -92,9 +92,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/bus_station_list_around"
-        android:divider="#f00"
-        android:dividerHeight="2dp"
-        android:listSelector="#599e2b">
+        android:divider="#0044ff"
+        android:dividerHeight="2dp">
     </ListView>
 
     <!--<Button

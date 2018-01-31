@@ -506,6 +506,7 @@ public class BusMapsActivity extends Fragment implements
                                         startActivity(intent);
                                     }
                                 });
+
                             }
                         } else {
                             Log.d(TAG, "Data bus station return empty");
