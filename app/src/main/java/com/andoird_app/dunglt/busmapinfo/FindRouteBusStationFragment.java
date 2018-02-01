@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -179,8 +180,31 @@ public class FindRouteBusStationFragment extends Fragment {
                         itemAnimator.setAddDuration(1000);
                         itemAnimator.setRemoveDuration(1000);
                         recyclerFindRouteView.setItemAnimator(itemAnimator);
+
+                        recyclerFindRouteView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                            @Override
+                            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                                rv.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                    }
+                                });
+                                return false;
+                            }
+
+                            @Override
+                            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+                            }
+
+                            @Override
+                            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                            }
+                        });
                     }
-                    Log.d(TAG, "We have busStation list start and destination");
                 }else{
                     Log.d(TAG, "busStationListStart and busStationListEnd empty!");
                 }

@@ -41,18 +41,20 @@
             android:src="@drawable/ic_navbar" />
 
         <AutoCompleteTextView
+            android:id="@+id/input_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@+id/ic_navibar"
             android:layout_toLeftOf="@id/ic_magnify"
             android:layout_centerVertical="true"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:paddingLeft="6dp"
             android:textSize="15sp"
             android:textColor="#000"
-            android:id="@+id/input_search"
             android:background="@null"
             android:hint="Enter Address City or Zip Code"
-            android:imeOptions="actionSearch"/>
+            android:imeOptions="actionSearch" />
 
         <Button
             android:id="@+id/btn_clear"
@@ -95,9 +97,9 @@
         android:clickable="true"
         android:focusable="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_bus_float"
-        android:background="@drawable/oval_shape"
-        app:backgroundTint="#fcf9f9"
+        android:src="@drawable/ic_bus_station_title"
+        android:background="@drawable/blue_oval_shape"
+        app:backgroundTint="#f64159ef"
         app:layout_anchor="@id/bus_list_info"
         app:layout_anchorGravity="top|right|end" />
 </android.support.design.widget.CoordinatorLayout>

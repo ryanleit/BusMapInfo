@@ -626,7 +626,6 @@ public class BusMapsFragment extends Fragment implements
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, DEFAULT_ZOOM));
 
-
         // Zoom in, animating the camera.
         mMap.animateCamera(CameraUpdateFactory.zoomIn());
 
@@ -643,7 +642,6 @@ public class BusMapsFragment extends Fragment implements
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
         // drawCircle(latlng);
-
 
         /* request get bustation */
         BusInfoApi busApi = new BusInfoApi();

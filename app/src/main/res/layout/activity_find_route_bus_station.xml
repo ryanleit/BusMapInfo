@@ -91,11 +91,16 @@ android:orientation="vertical">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <EditText
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:id="@+id/find_route_title"
-            android:text="Result for find route:"/>
+            android:background="#e9b1cdf7"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:textColor="#10238f"
+            android:text="Result for find route"/>
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
