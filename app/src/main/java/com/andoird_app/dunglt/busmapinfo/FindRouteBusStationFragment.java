@@ -58,9 +58,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FindRouteBusStationActivity extends Fragment {
+public class FindRouteBusStationFragment extends Fragment {
 
     private static final String TAG = "MapActivity";
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     ArrayList<BusStation> busStationList;
     ArrayList<BusStation> busStationListStart;
@@ -84,6 +92,25 @@ public class FindRouteBusStationActivity extends Fragment {
     private LatLng position_b;
 
     private final String authKey = "33044a4fc0d44b7ba4441a0f09c60381";
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment AboutFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static FindRouteBusStationFragment newInstance(String param1, String param2) {
+        FindRouteBusStationFragment fragment = new FindRouteBusStationFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,9 +170,9 @@ public class FindRouteBusStationActivity extends Fragment {
                     }
 
                     if(routeSearchGuides.size() > 0) {
-                        Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationActivity.super.getActivity());
+                        Recycler_View_Find_Route_Adapter adapter = new Recycler_View_Find_Route_Adapter(routeSearchGuides, FindRouteBusStationFragment.super.getActivity());
                         recyclerFindRouteView.setAdapter(adapter);
-                        recyclerFindRouteView.setLayoutManager(new LinearLayoutManager(FindRouteBusStationActivity.super.getActivity()));
+                        recyclerFindRouteView.setLayoutManager(new LinearLayoutManager(FindRouteBusStationFragment.super.getActivity()));
 
                         //******
                         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();

@@ -96,7 +96,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BusMapsActivity extends Fragment implements
+public class BusMapsFragment extends Fragment implements
         OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -104,6 +104,14 @@ public class BusMapsActivity extends Fragment implements
 
     private GoogleMap mMap;
     private static final String TAG = "MapActivity";
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -152,6 +160,24 @@ public class BusMapsActivity extends Fragment implements
     private LocationCallback mLocationCallback;
 
     private final String authKey = "33044a4fc0d44b7ba4441a0f09c60381";
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment AboutFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static AboutFragment newInstance(String param1, String param2) {
+        AboutFragment fragment = new AboutFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -489,7 +515,7 @@ public class BusMapsActivity extends Fragment implements
                                 CharSequence textNumberBusStation = "Have " + Integer.toString(busStationList.size()) + " bus stations around the position.";
                                 mNumberBusStations.setText(textNumberBusStation);
 
-                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsActivity.super.getActivity(), busStationList, currentLocationMarker.getPosition());
+                                BusStationAdapter arrayAdapter = new BusStationAdapter(BusMapsFragment.super.getActivity(), busStationList, currentLocationMarker.getPosition());
                                 busListView.setAdapter(arrayAdapter);
 
                                 busListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -498,7 +524,7 @@ public class BusMapsActivity extends Fragment implements
                                         @SuppressWarnings("unchecked")
                                         BusStation objStation = (BusStation) parent.getItemAtPosition(position);
 
-                                        Intent intent = new Intent(BusMapsActivity.super.getActivity(), BusStationDetailActivity.class);
+                                        Intent intent = new Intent(BusMapsFragment.super.getActivity(), BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", objStation.getStopId());
                                         intent.putExtra("mCurrentLatlng", new double[]{currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude});
                                         intent.putExtra("mBusStationLatlng", new double[]{objStation.getLatLng().latitude, objStation.getLatLng().longitude});
@@ -791,7 +817,7 @@ public class BusMapsActivity extends Fragment implements
             Task<PlaceBufferResponse> placeResult = mGeoDataClient.getPlaceById(placeId);
             placeResult.addOnCompleteListener(mUpdatePlaceDetailsCallback);
 
-            Toast.makeText(BusMapsActivity.super.getActivity(), "Clicked: " + primaryText,
+            Toast.makeText(BusMapsFragment.super.getActivity(), "Clicked: " + primaryText,
                     Toast.LENGTH_SHORT).show();
             Log.i(TAG, "Called getPlaceById to get Place details for " + placeId);
         }

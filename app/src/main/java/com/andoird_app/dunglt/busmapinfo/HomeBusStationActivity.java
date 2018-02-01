@@ -4,13 +4,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,12 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;
 
 public class HomeBusStationActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        HistoryFragment.OnListFragmentInteractionListener{
 
 
     private static final String TAG = "HomeScreen";
@@ -47,15 +43,6 @@ public class HomeBusStationActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         if (isServicesOK()) {
-           /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
-            });*/
-
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -64,24 +51,32 @@ public class HomeBusStationActivity extends AppCompatActivity
 
             navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
+
+
             //Get menuItem index 0
-            if (savedInstanceState == null) {
-                final android.os.Handler handler = new android.os.Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getSupportActionBar().hide();
-                        MenuItem item = navigationView.getMenu().getItem(0);
-                        item.setChecked(true);
-                        onNavigationItemSelected(item);
+            getSupportActionBar().hide();
+            MenuItem item = navigationView.getMenu().getItem(0);
+            item.setChecked(true);
 
-                        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-                        appBarLayout.setExpanded(false, true);
+            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Class busMapsClass = BusMapsFragment.class;
+            try {
+                ft.replace(R.id.content_frame, (Fragment) busMapsClass.newInstance());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            ft.commit();
 
-                        overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
-                        hideDialog();
-                    }
-                }, 2000);
+            /*onNavigationItemSelected(item);
+
+            AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
+            appBarLayout.setExpanded(false, true);*/
+
+            overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+            if(dialog != null){
+                dialog.hide();
             }
         }
     }
@@ -89,7 +84,7 @@ public class HomeBusStationActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        showDialog();
+       // showDialog();
     }
 
     public void showDialog() {
@@ -152,31 +147,47 @@ public class HomeBusStationActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
         Fragment fragment = null;
-        getSupportActionBar().show();
-        if (id == R.id.nav_camera) {
-            fragment = new BusMapsActivity();
-            getSupportActionBar().hide();
-        } else if (id == R.id.nav_gallery) {
-            fragment = new FindRouteBusStationActivity();
-        } else if (id == R.id.nav_slideshow) {
+        Class fragmentClass;
 
-        } else if (id == R.id.nav_manage) {
+        switch(item.getItemId()) {
+            case R.id.nav_bus_map:
+                fragmentClass = BusMapsFragment.class;
+                getSupportActionBar().hide();
+                break;
+            case R.id.nav_find_route:
+                fragmentClass = FindRouteBusStationFragment.class;
+                getSupportActionBar().show();
+                break;
+            case R.id.nav_history:
+                fragmentClass = HistoryFragment.class;
+                getSupportActionBar().show();
+                break;
+            case R.id.nav_guide:
+                fragmentClass = AboutFragment.class;
+                getSupportActionBar().show();
+                break;
+            default:
+                fragmentClass = BusMapsFragment.class;
+                getSupportActionBar().hide();
+        }
 
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "Error Navigation: "+ e.getMessage());
         }
         //replacing the fragment
         if (fragment != null) {
-
+            // Insert the fragment by replacing any existing fragment
+           // FragmentManager fragmentManager = getSupportFragmentManager();
+           // fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
             android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -215,5 +226,10 @@ public class HomeBusStationActivity extends AppCompatActivity
 
     public  LatLng getCurrentLocation(){
         return currentLocation;
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 }
