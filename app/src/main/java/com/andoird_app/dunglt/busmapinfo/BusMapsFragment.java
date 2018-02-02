@@ -47,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStation;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -504,8 +505,6 @@ public class BusMapsFragment extends Fragment implements
                                                 .title(busStation.getName())
                                                 .snippet("Routes: " + busStation.getRoutes())
                                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_bus_station_marker))));
-                                    } else {
-                                        Log.d(TAG, "ko khai thac.");
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -523,7 +522,10 @@ public class BusMapsFragment extends Fragment implements
                                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                         @SuppressWarnings("unchecked")
                                         BusStation objStation = (BusStation) parent.getItemAtPosition(position);
-
+                                        /* Save Bus Station to DB*/
+                                        BusStationTable bst = new BusStationTable(objStation.getStopId(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getLatLng().latitude, objStation.getLatLng().longitude, objStation.getRoutes());
+                                        bst.save();
+                                        /* End save */
                                         Intent intent = new Intent(BusMapsFragment.super.getActivity(), BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", objStation.getStopId());
                                         intent.putExtra("mCurrentLatlng", new double[]{currentLocationMarker.getPosition().latitude, currentLocationMarker.getPosition().longitude});

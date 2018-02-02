@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent.DummyItem;
+import com.andoird_app.dunglt.busmapinfo.dummy.HistoryContent;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 
 import java.util.List;
 
@@ -70,7 +72,7 @@ public class HistoryFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(HistoryContent.ITEMS, mListener));
         }
         return view;
     }
@@ -105,6 +107,6 @@ public class HistoryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(BusStationTable item);
     }
 }

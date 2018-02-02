@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;
@@ -229,7 +230,7 @@ public class HomeBusStationActivity extends AppCompatActivity
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(BusStationTable item) {
 
     }
 }

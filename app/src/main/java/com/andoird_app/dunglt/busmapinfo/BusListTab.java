@@ -155,7 +155,6 @@ public class BusListTab extends Fragment {
                 }
             }
         }
-        Log.d(TAG, "prepare buslisttab: " + data.toString());
         return data;
     }
 
