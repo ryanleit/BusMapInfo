@@ -47,7 +47,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStation;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModelDao;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
+import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -523,8 +526,11 @@ public class BusMapsFragment extends Fragment implements
                                         @SuppressWarnings("unchecked")
                                         BusStation objStation = (BusStation) parent.getItemAtPosition(position);
                                         /* Save Bus Station to DB*/
-                                        BusStationTable bst = new BusStationTable(objStation.getStopId(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getLatLng().latitude, objStation.getLatLng().longitude, objStation.getRoutes());
-                                        bst.save();
+                                        DaoSession daoSession = Applications.instance.getDaoSession();
+                                        BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
+
+                                        BusStationModel bst = new BusStationModel(objStation.getStopId(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getRoutes(), objStation.getLatLng().latitude, objStation.getLatLng().longitude);
+                                        busStationModelDao.insert(bst);
                                         /* End save */
                                         Intent intent = new Intent(BusMapsFragment.super.getActivity(), BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", objStation.getStopId());

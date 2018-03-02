@@ -72,7 +72,9 @@ public class HistoryFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(HistoryContent.ITEMS, mListener));
+
+            HistoryContent hc = new HistoryContent();
+            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(hc.ITEMS, mListener));
         }
         return view;
     }

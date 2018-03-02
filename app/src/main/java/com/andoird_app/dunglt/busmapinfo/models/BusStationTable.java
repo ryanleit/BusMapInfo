@@ -1,17 +1,25 @@
 package com.andoird_app.dunglt.busmapinfo.models;
 
-import com.orm.SugarRecord;
-
 /**
  * Created by dunglt on 12/29/2017.
  */
 
-public class BusStationTable extends SugarRecord<BusStationTable> {
+
+public class BusStationTable {
 
     Integer stopId;
-    String code, name, stopType, zone, ward, addressNo, street, supportDisability, status, search, routes;
 
-    Double lat, lng;
+    String name;
+    String stopType;
+    String addressNo;
+    String street;
+    String routes;
+    Double lat;
+    Double lng;
+
+    public BusStationTable(){
+        super();
+    }
 
     public BusStationTable(Integer stopId, String name, String stopType, String addressNo, String street,Double lat, Double lng, String routes) {
         this.stopId = stopId;
