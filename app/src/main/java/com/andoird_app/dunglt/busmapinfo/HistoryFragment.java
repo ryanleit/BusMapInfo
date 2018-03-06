@@ -77,7 +77,9 @@ public class HistoryFragment extends Fragment {
 
             DaoSession daoSession = ((Applications)HistoryFragment.super.getActivity().getApplication()).getDaoSession();
             HistoryContent hc = new HistoryContent(daoSession);
-            recyclerView.setAdapter(new MyItemRecyclerViewAdapter(hc.ITEMS, mListener));
+
+            MyItemRecyclerViewAdapter mAdapter = new MyItemRecyclerViewAdapter(hc.ITEMS, mListener);
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
