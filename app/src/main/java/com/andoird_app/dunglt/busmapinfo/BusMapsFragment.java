@@ -526,10 +526,11 @@ public class BusMapsFragment extends Fragment implements
                                         @SuppressWarnings("unchecked")
                                         BusStation objStation = (BusStation) parent.getItemAtPosition(position);
                                         /* Save Bus Station to DB*/
-                                        DaoSession daoSession = Applications.instance.getDaoSession();
+                                        //DaoSession daoSession = Applications.instance.getDaoSession();
+                                        DaoSession daoSession = ((Applications)BusMapsFragment.super.getActivity().getApplication()).getDaoSession();
                                         BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
 
-                                        BusStationModel bst = new BusStationModel(objStation.getStopId(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getRoutes(), objStation.getLatLng().latitude, objStation.getLatLng().longitude);
+                                        BusStationModel bst = new BusStationModel(objStation.getStopId().longValue(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getRoutes(), objStation.getLatLng().latitude, objStation.getLatLng().longitude);
                                         busStationModelDao.insert(bst);
                                         /* End save */
                                         Intent intent = new Intent(BusMapsFragment.super.getActivity(), BusStationDetailActivity.class);

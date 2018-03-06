@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent.DummyItem;
 import com.andoird_app.dunglt.busmapinfo.dummy.HistoryContent;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
+import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
 
 import java.util.List;
 
@@ -73,7 +75,8 @@ public class HistoryFragment extends Fragment {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            HistoryContent hc = new HistoryContent();
+            DaoSession daoSession = ((Applications)HistoryFragment.super.getActivity().getApplication()).getDaoSession();
+            HistoryContent hc = new HistoryContent(daoSession);
             recyclerView.setAdapter(new MyItemRecyclerViewAdapter(hc.ITEMS, mListener));
         }
         return view;
@@ -109,6 +112,6 @@ public class HistoryFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(BusStationTable item);
+        void onListFragmentInteraction(BusStationModel item);
     }
 }

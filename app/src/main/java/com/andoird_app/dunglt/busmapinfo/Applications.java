@@ -19,7 +19,7 @@ public class Applications extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "bus-map-db");
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "bus_station_map_db");
         Database db = helper.getWritableDb();
         mDaoSession = new DaoMaster(db).newSession();
     }

@@ -25,23 +25,24 @@ public class HistoryContent {
      */
     public static final List<BusStationModel> ITEMS = new ArrayList<BusStationModel>();
 
-    public HistoryContent(){
-        getBusStationListDb();
+    public HistoryContent(DaoSession daoSession){
+        getBusStationListDb(daoSession);
     }
     /**
      * A map of sample (dummy) items, by ID.
      */
-    public static final Map<Integer, BusStationModel> ITEM_MAP = new HashMap<Integer, BusStationModel>();
+    public static final Map<Long, BusStationModel> ITEM_MAP = new HashMap<Long, BusStationModel>();
 
     private static final int COUNT = 25;
 
     private static void addItem(BusStationModel item) {
         ITEMS.add(item);
-        ITEM_MAP.put(item.getStopId(), item);
+        ITEM_MAP.put(item.getId(), item);
     }
 
-    public void getBusStationListDb(){
-        DaoSession daoSession = Applications.instance.getDaoSession();
+    public void getBusStationListDb(DaoSession daoSession){
+        //DaoSession daoSession = Applications.instance.getDaoSession();
+
         List<BusStationModel> nineteens = daoSession.getBusStationModelDao().queryBuilder().list();
 
 

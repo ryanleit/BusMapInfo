@@ -10,8 +10,8 @@ import org.greenrobot.greendao.annotation.Generated;
 
 @Entity
 public class BusStationModel {
-    @Id(autoincrement = false)
-    Integer stopId;
+    @Id(autoincrement = true)
+    Long id;
     String name;
     String stopType;
     String addressNo;
@@ -19,11 +19,10 @@ public class BusStationModel {
     String routes;
     Double lat;
     Double lng;
-    @Generated(hash = 943552180)
-    public BusStationModel(Integer stopId, String name, String stopType,
-            String addressNo, String street, String routes, Double lat,
-            Double lng) {
-        this.stopId = stopId;
+    @Generated(hash = 953416704)
+    public BusStationModel(Long id, String name, String stopType, String addressNo,
+            String street, String routes, Double lat, Double lng) {
+        this.id = id;
         this.name = name;
         this.stopType = stopType;
         this.addressNo = addressNo;
@@ -35,11 +34,11 @@ public class BusStationModel {
     @Generated(hash = 1903136693)
     public BusStationModel() {
     }
-    public Integer getStopId() {
-        return this.stopId;
+    public Long getId() {
+        return this.id;
     }
-    public void setStopId(Integer stopId) {
-        this.stopId = stopId;
+    public void setId(Long id) {
+        this.id = id;
     }
     public String getName() {
         return this.name;
@@ -83,5 +82,4 @@ public class BusStationModel {
     public void setLng(Double lng) {
         this.lng = lng;
     }
-
 }

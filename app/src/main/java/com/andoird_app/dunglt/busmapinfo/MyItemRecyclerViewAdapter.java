@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.andoird_app.dunglt.busmapinfo.HistoryFragment.OnListFragmentInteractionListener;
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent.DummyItem;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 
 import java.util.List;
@@ -19,10 +20,10 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<BusStationTable> mValues;
+    private final List<BusStationModel> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyItemRecyclerViewAdapter(List<BusStationTable> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<BusStationModel> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,7 +38,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getStopId());
+        holder.mIdView.setText(mValues.get(position).getId().toString());
         holder.mContentView.setText(mValues.get(position).getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -61,7 +62,7 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public BusStationTable mItem;
+        public BusStationModel mItem;
 
         public ViewHolder(View view) {
             super(view);
