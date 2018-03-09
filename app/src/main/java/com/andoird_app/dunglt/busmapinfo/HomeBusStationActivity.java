@@ -15,9 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
-import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.model.LatLng;

@@ -4,21 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 //import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent;
 import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent.DummyItem;
 import com.andoird_app.dunglt.busmapinfo.dummy.HistoryContent;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
-import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
-
-import java.util.List;
 
 /**
  * A fragment representing a list of Items.
@@ -69,11 +64,12 @@ public class HistoryFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            /*if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
+            }*/
 
             DaoSession daoSession = ((Applications)HistoryFragment.super.getActivity().getApplication()).getDaoSession();
             HistoryContent hc = new HistoryContent(daoSession);
