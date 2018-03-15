@@ -1,6 +1,9 @@
 package com.andoird_app.dunglt.busmapinfo;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +12,9 @@ import android.widget.TextView;
 
 import com.andoird_app.dunglt.busmapinfo.HistoryFragment.OnListFragmentInteractionListener;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModelDao;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
+import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
 
 import java.util.List;
 
@@ -22,10 +27,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
 
     private final List<BusStationModel> mValues;
     private final OnListFragmentInteractionListener mListener;
+    public DaoSession daoSession;
 
-    public MyItemRecyclerViewAdapter(List<BusStationModel> items, OnListFragmentInteractionListener listener) {
+    public MyItemRecyclerViewAdapter(List<BusStationModel> items, OnListFragmentInteractionListener listener, DaoSession daoSess) {
         mValues = items;
         mListener = listener;
+        daoSession =  daoSess;
     }
 
     @Override
@@ -36,10 +43,21 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(mValues.get(position).getName());
-       // holder.mContentView.setText(mValues.get(position).getStreet());
+
+        holder.mDelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Long id = mValues.get(position).getId();
+                Log.d("delete busstation", "stopId: "+id.toString());
+                //BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
+                daoSession.getBusStationModelDao().queryBuilder().where(BusStationModelDao.Properties.Id.eq(id)).buildDelete().executeDeleteWithoutDetachingEntities();
+
+                removeAt(position);
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +70,12 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             }
         });
     }
+    public void removeAt(int position){
+        mValues.remove(position);
+        notifyItemChanged(position);
+        notifyDataSetChanged();
 
+    }
     @Override
     public int getItemCount() {
         return mValues.size();

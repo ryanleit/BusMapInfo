@@ -529,9 +529,11 @@ public class BusMapsFragment extends Fragment implements
                                         //DaoSession daoSession = Applications.instance.getDaoSession();
                                         DaoSession daoSession = ((Applications)BusMapsFragment.super.getActivity().getApplication()).getDaoSession();
                                         BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
-
-                                        BusStationModel bst = new BusStationModel(objStation.getStopId().longValue(), objStation.getName(), objStation.getStopType(),objStation.getAddressNo(), objStation.getStreet(), objStation.getRoutes(), objStation.getLatLng().latitude, objStation.getLatLng().longitude);
-                                        busStationModelDao.insert(bst);
+                                        BusStationModel bst = daoSession.getBusStationModelDao().queryBuilder().where(BusStationModelDao.Properties.Id.eq(objStation.getStopId().longValue())).unique();
+                                        if(bst == null) {
+                                            bst = new BusStationModel(objStation.getStopId().longValue(), objStation.getName(), objStation.getStopType(), objStation.getAddressNo(), objStation.getStreet(), objStation.getRoutes(), objStation.getLatLng().latitude, objStation.getLatLng().longitude);
+                                            busStationModelDao.insert(bst);
+                                        }
                                         /* End save */
                                         Intent intent = new Intent(BusMapsFragment.super.getActivity(), BusStationDetailActivity.class);
                                         intent.putExtra("mStopId", objStation.getStopId());

@@ -6,11 +6,10 @@ import android.app.Fragment;
 //import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.andoird_app.dunglt.busmapinfo.dummy.DummyContent.DummyItem;
 import com.andoird_app.dunglt.busmapinfo.dummy.HistoryContent;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
 import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
@@ -65,6 +64,7 @@ public class HistoryFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
             /*if (mColumnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -73,8 +73,7 @@ public class HistoryFragment extends Fragment {
 
             DaoSession daoSession = ((Applications)HistoryFragment.super.getActivity().getApplication()).getDaoSession();
             HistoryContent hc = new HistoryContent(daoSession);
-
-            MyItemRecyclerViewAdapter mAdapter = new MyItemRecyclerViewAdapter(hc.ITEMS, mListener);
+            MyItemRecyclerViewAdapter mAdapter = new MyItemRecyclerViewAdapter(hc.ITEMS, mListener, daoSession);
             recyclerView.setAdapter(mAdapter);
         }
         return view;

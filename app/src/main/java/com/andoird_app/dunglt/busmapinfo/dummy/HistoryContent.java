@@ -23,7 +23,7 @@ public class HistoryContent {
     /**
      * An array of sample (dummy) items.
      */
-    public static final List<BusStationModel> ITEMS = new ArrayList<BusStationModel>();
+    public List<BusStationModel> ITEMS = new ArrayList<BusStationModel>();
 
     public HistoryContent(DaoSession daoSession){
         getBusStationListDb(daoSession);
@@ -33,9 +33,7 @@ public class HistoryContent {
      */
     public static final Map<Long, BusStationModel> ITEM_MAP = new HashMap<Long, BusStationModel>();
 
-    private static final int COUNT = 25;
-
-    private static void addItem(BusStationModel item) {
+    private void addItem(BusStationModel item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.getId(), item);
     }
