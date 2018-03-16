@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,8 +71,16 @@ public class BusStationDetailActivity extends AppCompatActivity implements
         toolbar.setTitle("Bus Station Detail");
 
         setSupportActionBar(toolbar);
-        final ActionBar ab = getSupportActionBar();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Event click", "Icon back click!");
+                onBackPressed();
+            }
+        });
+        ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+
 
         tabLayout =  (TabLayout) findViewById(R.id.tabLayout);
         //Adding the tabs using addTab() method

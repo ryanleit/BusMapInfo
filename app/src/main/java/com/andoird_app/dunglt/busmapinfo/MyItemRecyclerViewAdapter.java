@@ -15,6 +15,7 @@ import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModelDao;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -25,14 +26,18 @@ import java.util.List;
  */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
+    public Context context;
     private final List<BusStationModel> mValues;
     private final OnListFragmentInteractionListener mListener;
     public DaoSession daoSession;
+    public LatLng currentLatlng;
 
-    public MyItemRecyclerViewAdapter(List<BusStationModel> items, OnListFragmentInteractionListener listener, DaoSession daoSess) {
+    public MyItemRecyclerViewAdapter(Context cont, List<BusStationModel> items, OnListFragmentInteractionListener listener, DaoSession daoSess, LatLng current) {
+        context = cont;
         mValues = items;
         mListener = listener;
         daoSession =  daoSess;
+        currentLatlng = current;
     }
 
     @Override
@@ -51,11 +56,24 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
             @Override
             public void onClick(View v) {
                 Long id = mValues.get(position).getId();
-                Log.d("delete busstation", "stopId: "+id.toString());
                 //BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
                 daoSession.getBusStationModelDao().queryBuilder().where(BusStationModelDao.Properties.Id.eq(id)).buildDelete().executeDeleteWithoutDetachingEntities();
 
                 removeAt(position);
+            }
+        });
+
+        holder.mDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Long id = mValues.get(position).getId();
+                 /* End save */
+                Intent intent = new Intent(context, BusStationDetailActivity.class);
+                intent.putExtra("mStopId", mValues.get(position).getId());
+                intent.putExtra("mCurrentLatlng", new double[]{currentLatlng.latitude, currentLatlng.longitude});
+                intent.putExtra("mBusStationLatlng", new double[]{mValues.get(position).getLat(), mValues.get(position).getLng()});
+
+                context.startActivity(intent);
             }
         });
 

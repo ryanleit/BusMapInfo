@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.andoird_app.dunglt.busmapinfo.dummy.HistoryContent;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
 import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * A fragment representing a list of Items.
@@ -27,6 +28,9 @@ public class HistoryFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+
+    public LatLng currentLocation;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,6 +52,8 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        currentLocation = ((HomeBusStationActivity)getActivity()).getCurrentLocation();
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
@@ -73,7 +79,7 @@ public class HistoryFragment extends Fragment {
 
             DaoSession daoSession = ((Applications)HistoryFragment.super.getActivity().getApplication()).getDaoSession();
             HistoryContent hc = new HistoryContent(daoSession);
-            MyItemRecyclerViewAdapter mAdapter = new MyItemRecyclerViewAdapter(hc.ITEMS, mListener, daoSession);
+            MyItemRecyclerViewAdapter mAdapter = new MyItemRecyclerViewAdapter(this.getActivity(),hc.ITEMS, mListener, daoSession, currentLocation);
             recyclerView.setAdapter(mAdapter);
         }
         return view;
