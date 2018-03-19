@@ -32,11 +32,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-       <!-- <meta-data android:name="DATABASE" android:value="bus_station_map.db" />
-        <meta-data android:name="VERSION" android:value="3" />
-        <meta-data android:name="QUERY_LOG" android:value="true" />
-        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.andoird_app.dunglt.busmapinfo.models" />-->
         <!--<activity
             android:name=".BusStations"
             android:label="Bus Stations">

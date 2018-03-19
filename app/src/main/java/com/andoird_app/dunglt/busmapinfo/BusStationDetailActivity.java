@@ -74,7 +74,6 @@ public class BusStationDetailActivity extends AppCompatActivity implements
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Event click", "Icon back click!");
                 onBackPressed();
             }
         });
@@ -113,7 +112,6 @@ public class BusStationDetailActivity extends AppCompatActivity implements
                 {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG,"Api response: " + response.toString());
                         mBusStationInfo = new ArrayList<BusStationDetail>();
                         // display response
                         if(response.length() > 0) {
@@ -153,8 +151,12 @@ public class BusStationDetailActivity extends AppCompatActivity implements
                                     e.printStackTrace();
                                 }
                             }
+
+                            setUpTabLayout();
+                        }else{
+                            onBackPressed();
                         }
-                        setUpTabLayout();
+
                         return;
                     }
                 },

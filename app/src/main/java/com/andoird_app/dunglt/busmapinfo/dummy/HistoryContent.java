@@ -2,6 +2,7 @@ package com.andoird_app.dunglt.busmapinfo.dummy;
 
 import com.andoird_app.dunglt.busmapinfo.Applications;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
+import com.andoird_app.dunglt.busmapinfo.models.BusStationModelDao;
 import com.andoird_app.dunglt.busmapinfo.models.BusStationTable;
 import com.andoird_app.dunglt.busmapinfo.models.DaoSession;
 
@@ -41,8 +42,7 @@ public class HistoryContent {
     public void getBusStationListDb(DaoSession daoSession){
         //DaoSession daoSession = Applications.instance.getDaoSession();
 
-        List<BusStationModel> nineteens = daoSession.getBusStationModelDao().queryBuilder().list();
-
+        List<BusStationModel> nineteens = daoSession.getBusStationModelDao().queryBuilder().orderDesc(BusStationModelDao.Properties.Id).list();
 
         for(int i = 0; i < nineteens.size(); i++){
             addItem(nineteens.get(i));

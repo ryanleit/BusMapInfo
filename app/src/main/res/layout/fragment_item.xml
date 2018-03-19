@@ -28,8 +28,7 @@
         android:layout_height="20dp"
         android:layout_margin="@dimen/text_margin"
         android:layout_marginEnd="2dp"
-        android:background="#f21a1a"
+        android:background="@drawable/ic_del"
         android:paddingEnd="2dp"
-        android:text="X"
         android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>

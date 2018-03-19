@@ -3,7 +3,10 @@ package com.andoird_app.dunglt.busmapinfo;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
@@ -32,6 +36,7 @@ public class HomeBusStationActivity extends AppCompatActivity
     public LatLng currentLocation;
 
     ProgressDialog dialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,28 +80,22 @@ public class HomeBusStationActivity extends AppCompatActivity
             appBarLayout.setExpanded(false, true);*/
 
             overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
-            if(dialog != null){
-                dialog.hide();
-            }
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-       // showDialog();
-    }
 
     public void showDialog() {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading...");
         dialog.setCancelable(false);
-        dialog.setInverseBackgroundForced(false);
+        //dialog.setInverseBackgroundForced(false);
         dialog.show();
     }
 
     public void hideDialog() {
-        dialog.hide();
+        if(dialog != null){
+            dialog.hide();
+        }
     }
 
     public void init(){
