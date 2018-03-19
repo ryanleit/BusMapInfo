@@ -47,40 +47,34 @@ public class HomeBusStationActivity extends AppCompatActivity
        // toolbar.setLogo(R.drawable.ic_bus_station_title);
         setSupportActionBar(toolbar);
 
-        if (isServicesOK()) {
-            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.addDrawerListener(toggle);
-            toggle.syncState();
 
-            navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(this);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
-            //Get menuItem index 0
-            getSupportActionBar().hide();
-            MenuItem item = navigationView.getMenu().getItem(0);
-            item.setChecked(true);
+        //Get menuItem index 0
+        getSupportActionBar().hide();
+        MenuItem item = navigationView.getMenu().getItem(0);
+        item.setChecked(true);
 
-            android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Class busMapsClass = BusMapsFragment.class;
-            try {
-                ft.replace(R.id.content_frame, (Fragment) busMapsClass.newInstance());
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            ft.commit();
-
-            /*onNavigationItemSelected(item);
-
-            AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar_layout);
-            appBarLayout.setExpanded(false, true);*/
-
-            overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+        android.app.FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Class busMapsClass = BusMapsFragment.class;
+        try {
+            ft.replace(R.id.content_frame, (Fragment) busMapsClass.newInstance());
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+        ft.commit();
+
+        overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
     }
 
 
@@ -98,18 +92,7 @@ public class HomeBusStationActivity extends AppCompatActivity
         }
     }
 
-    public void init(){
-        /*final android.os.Handler handler = new android.os.Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(BusStations.this, BusMapsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
-            }
-        }, 2000);*/
-        return;
-    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -190,30 +173,6 @@ public class HomeBusStationActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public boolean isServicesOK()
-    {
-        return true;
-        /*//everything is find and user can make map request
-        Log.d(TAG, "isServicesOk: check google services version");
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeBusStationActivity.this);
-
-        if(available == ConnectionResult.SUCCESS){
-            Log.d(TAG, "isServicesOK: Google Play Services is working");
-            return true;
-        }else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
-            //an error occured but we can reslove it
-            Log.d(TAG, "isServicesOK: an error occured but we can fix it");
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(HomeBusStationActivity.this, available, ERROR_DIALOG_REQUEST);
-
-            dialog.show();
-        }else{
-            Toast.makeText(this, "You can't make map request", Toast.LENGTH_SHORT).show();
-        }
-
-        return false;*/
     }
 
     public void openNavigatioView(){

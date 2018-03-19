@@ -207,7 +207,7 @@ public class FindRouteBusStationFragment extends Fragment {
                         });
                     }
                 }else{
-                    Log.d(TAG, "busStationListStart and busStationListEnd empty!");
+                    Toast.makeText(FindRouteBusStationFragment.super.getActivity(), "Have not data!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -1,6 +1,8 @@
 package com.andoird_app.dunglt.busmapinfo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -55,11 +57,20 @@ public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecycl
         holder.mDelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Long id = mValues.get(position).getId();
-                //BusStationModelDao busStationModelDao = daoSession.getBusStationModelDao();
-                daoSession.getBusStationModelDao().queryBuilder().where(BusStationModelDao.Properties.Id.eq(id)).buildDelete().executeDeleteWithoutDetachingEntities();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                removeAt(position);
+                builder.setMessage("Are you sure?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Long stopId = mValues.get(position).getId();
+                        daoSession.getBusStationModelDao().queryBuilder().where(BusStationModelDao.Properties.Id.eq(stopId)).buildDelete().executeDeleteWithoutDetachingEntities();
+
+                        removeAt(position);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
             }
         });
 
