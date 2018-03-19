@@ -17,16 +17,6 @@
         android:background="@color/colorAccent"
         android:textColor="@color/cardview_light_background"
         android:text="Bus Station Map" />
-    <Button
-        android:id="@+id/btnHome"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/cardview_light_background"
-        android:text="Go Home" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>-->
         <activity
-            android:name=".HomeBusStationActivity"
+            android:name=".BusStations"
             android:label="@string/title_activity_home_bus_station"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -50,14 +50,8 @@
             </intent-filter>
         </activity>
 
-        <!--<activity
-            android:name=".BusMapsActivity"
-            android:label="@string/title_activity_bus_maps" />-->
         <activity android:name=".BusStationDetailActivity" />
-        <!--<activity
-            android:name=".FindRouteBusStationActivity"
-            android:label="@string/title_activity_home_bus_station"
-            android:theme="@style/AppTheme" />-->
+        <activity android:name=".HomeBusStationActivity" />
     </application>
 
 </manifest>

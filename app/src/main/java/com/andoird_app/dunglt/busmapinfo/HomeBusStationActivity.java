@@ -194,7 +194,8 @@ public class HomeBusStationActivity extends AppCompatActivity
 
     public boolean isServicesOK()
     {
-        //everything is find and user can make map request
+        return true;
+        /*//everything is find and user can make map request
         Log.d(TAG, "isServicesOk: check google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(HomeBusStationActivity.this);
@@ -212,7 +213,7 @@ public class HomeBusStationActivity extends AppCompatActivity
             Toast.makeText(this, "You can't make map request", Toast.LENGTH_SHORT).show();
         }
 
-        return false;
+        return false;*/
     }
 
     public void openNavigatioView(){

@@ -40,15 +40,6 @@ public class BusStations extends AppCompatActivity {
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(BusStations.this, BusMapsFragment.class);
-                startActivity(intent);
-            }
-        });
-        Button btnHome = (Button) findViewById(R.id.btnHome);
-
-        btnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
                 Intent intent = new Intent(BusStations.this, HomeBusStationActivity.class);
                 startActivity(intent);
             }
@@ -57,7 +48,7 @@ public class BusStations extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(BusStations.this, BusMapsFragment.class);
+                Intent intent = new Intent(BusStations.this, HomeBusStationActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
             }
