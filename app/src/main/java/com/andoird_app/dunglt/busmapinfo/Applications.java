@@ -15,7 +15,11 @@ import org.greenrobot.greendao.database.Database;
 
 public class Applications extends Application {
     private DaoSession mDaoSession;
-    public static Applications instance = new Applications();
+    public  static Applications instance = new Applications();
+
+    public static synchronized Applications getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -23,11 +27,15 @@ public class Applications extends Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "bus_station_map_db");
         Database db = helper.getWritableDb();
         mDaoSession = new DaoMaster(db).newSession();
-
+        //instance = this;
     }
 
     public DaoSession getDaoSession() {
         return mDaoSession;
     }
 
+
+    public void setConnectivityListener(NetworkChangeReceiver.ConnectivityReceiverListener listener) {
+        NetworkChangeReceiver.connectivityReceiverListener = listener;
+    }
 }

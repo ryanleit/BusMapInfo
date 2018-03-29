@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.support.design.widget.NavigationView;
@@ -17,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andoird_app.dunglt.busmapinfo.models.BusStationModel;
@@ -26,7 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class HomeBusStationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        HistoryFragment.OnListFragmentInteractionListener{
+        HistoryFragment.OnListFragmentInteractionListener ,
+        NetworkChangeReceiver.ConnectivityReceiverListener{
 
 
     private static final String TAG = "HomeScreen";
@@ -44,7 +48,7 @@ public class HomeBusStationActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_home_bus_station);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-       // toolbar.setLogo(R.drawable.ic_bus_station_title);
+        // toolbar.setLogo(R.drawable.ic_bus_station_title);
         setSupportActionBar(toolbar);
 
 
@@ -74,10 +78,40 @@ public class HomeBusStationActivity extends AppCompatActivity
         }
         ft.commit();
 
-        overridePendingTransition(R.transition.fade_in,R.transition.fade_out);
+        overridePendingTransition(R.transition.fade_in, R.transition.fade_out);
+
     }
 
+    // Showing the status in Snackbar
+    private void showSnack(boolean isConnected) {
+        String message;
+        int color;
+        if (isConnected) {
+            message = "Good! Connected to Internet";
+            color = Color.WHITE;
+        } else {
+            message = "Sorry! Not connected to internet";
+            color = Color.RED;
+        }
 
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // register connection status listener
+        Applications.getInstance().setConnectivityListener(this);
+    }
+    /**
+     * Callback will be triggered when there is change in
+     * network connection
+     */
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        showSnack(isConnected);
+    }
     public void showDialog() {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading...");
